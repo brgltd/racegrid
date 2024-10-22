@@ -1,0 +1,9 @@
+forge-std=dependencies/forge-std-1.9.3/src/
+
+@openzeppelin/contracts-upgradeable/=dependencies/@openzeppelin-contracts-upgradeable-5.0.2/
+
+@openzeppelin/contracts/=dependencies/@openzeppelin-contracts-5.0.2/
+
+openzeppelin-foundry-upgrades/=dependencies/openzeppelin-foundry-upgrades-0.3.6/src/
+
+solidity-stringutils/=dependencies/openzeppelin-foundry-upgrades-0.3.6/lib/solidity-stringutils/

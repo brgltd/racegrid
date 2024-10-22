@@ -1,0 +1,53 @@
+# environment variables
+.env
+
+# local env files
+.env*.local
+
+# compiler and broadcast files
+cache/
+out/
+broadcast/
+
+# soldeer libraries
+dependencies/
+
+# forge output
+out/*
+
+# npm libraries
+node_modules/
+
+# testing
+/coverage
+
+# next.js
+.next/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# generated images
+images/
+
+# prompts
+prompts/
+
+# misc
+game-assets/
