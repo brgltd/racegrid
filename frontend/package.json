@@ -18,6 +18,8 @@
     "@wagmi/core": "^2.13.8",
     "clsx": "^2.1.1",
     "encoding": "^0.1.13",
+    "leva": "0.9.21",
+    "lodash-es": "4.17.21",
     "next": "14.2.14",
     "pino-pretty": "^11.2.2",
     "react": "^18",
@@ -30,6 +32,7 @@
     "zustand": "^3.7.2"
   },
   "devDependencies": {
+    "@types/lodash-es": "4.17.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

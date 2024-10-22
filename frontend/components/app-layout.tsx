@@ -35,6 +35,42 @@ const queryClient = new QueryClient();
 //   },
 // });
 
+// export function AppLayout({
+//   children,
+// }: Readonly<{
+//   children: React.ReactNode;
+// }>) {
+//   return (
+//     <html lang="en">
+//       <body className={inter.className}>
+//         <WagmiProvider config={wagmiConfig}>
+//           <QueryClientProvider client={queryClient}>
+//             <RainbowKitProvider theme={rainbowDarkTheme()}>
+//               <AppProvider>
+//                 {/* <EquitoVoteProvider>
+//                 <AppRouterCacheProvider>
+//                   <ThemeProvider theme={darkTheme}>
+//                     <CssBaseline /> */}
+//                 <div className="">
+//                   <div className="">
+//                     <Navbar />
+//                     <main>{children}</main>
+//                     {/* <Footer /> */}
+//                   </div>
+//                 </div>
+//                 {/* <Toast />
+//                   </ThemeProvider>
+//                 </AppRouterCacheProvider>
+//               </EquitoVoteProvider> */}
+//               </AppProvider>
+//             </RainbowKitProvider>
+//           </QueryClientProvider>
+//         </WagmiProvider>
+//       </body>
+//     </html>
+//   );
+// }
+
 export function AppLayout({
   children,
 }: Readonly<{
@@ -47,21 +83,7 @@ export function AppLayout({
           <QueryClientProvider client={queryClient}>
             <RainbowKitProvider theme={rainbowDarkTheme()}>
               <AppProvider>
-                {/* <EquitoVoteProvider> 
-                <AppRouterCacheProvider>
-                  <ThemeProvider theme={darkTheme}>
-                    <CssBaseline /> */}
-                <div className="flex flex-row justify-center">
-                  <div className="mx-12" style={{ width: "1200px" }}>
-                    <Navbar />
-                    <main>{children}</main>
-                    {/* <Footer /> */}
-                  </div>
-                </div>
-                {/* <Toast />
-                  </ThemeProvider>
-                </AppRouterCacheProvider>
-              </EquitoVoteProvider> */}
+                <main className="main">{children}</main>
               </AppProvider>
             </RainbowKitProvider>
           </QueryClientProvider>

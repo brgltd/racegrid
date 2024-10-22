@@ -13,12 +13,13 @@ import {
   Stats,
 } from "@react-three/drei";
 import type { DirectionalLight } from "three";
+import { Physics, Debug } from "@react-three/cannon";
 import { useToggle } from "@/hooks/use-toggle";
 
-useTexture.preload("/game-assets/textures/heightmap_1024.png");
-useGLTF.preload("/game-assets/models/track-draco.glb");
-useGLTF.preload("/game-assets/models/chassis-draco.glb");
-useGLTF.preload("/game-assets/models/wheel-draco.glb");
+useTexture.preload("/textures/heightmap_1024.png");
+useGLTF.preload("/models/track-draco.glb");
+useGLTF.preload("/models/chassis-draco.glb");
+useGLTF.preload("/models/wheel-draco.glb");
 
 // function Intro({ children }: { children: ReactNode }) {
 //   return (
@@ -39,12 +40,13 @@ export function Game() {
   const [dpr, shadows, editor] = useStore((s) => [s.dpr, s.shadows, s.editor]);
 
   const ToggledOrbitControls = useToggle(OrbitControls, "editor");
+  const ToggledDebug = useToggle(Debug, "debug");
 
   return (
     <div>
       <div>the game</div>
-      <img src="/game-assets/images/bronze.png" width={100} height={100} />
-      {/* <img src="../game-assets/images/bronze.png" width={100} height={100} /> */}
+      <img src="/images/bronze.png" width={100} height={100} />
+      {/* <img src="../images/bronze.png" width={100} height={100} /> */}
       <Canvas
         key={`${dpr}${shadows}`}
         dpr={[1, dpr]}
@@ -71,7 +73,22 @@ export function Game() {
           makeDefault={editor}
           fov={75}
           position={[0, 20, 20]}
-        />
+        />{" "}
+        <Physics
+          allowSleep
+          broadphase="SAP"
+          defaultContactMaterial={{
+            contactEquationRelaxation: 4,
+            friction: 1e-3,
+          }}
+        >
+          <ToggledDebug scale={1.0001} color="white">
+            {/* <Vehicle angularVelocity={[...angularVelocity]} position={[...position]} rotation={[...rotation]}>
+              {light && <primitive object={light.target} />}
+              <Cameras />
+            </Vehicle> */}
+          </ToggledDebug>
+        </Physics>
       </Canvas>
     </div>
   );
