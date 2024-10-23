@@ -7,7 +7,8 @@ import { useStore } from "../store";
 import { Keys } from "./Keys";
 
 export function Intro({ children }: { children: ReactNode }): JSX.Element {
-  const [clicked, setClicked] = useState(false);
+  // const [clicked, setClicked] = useState(false);
+  const [clicked, setClicked] = useState(true);
   const [loading, setLoading] = useState(true);
   const { progress } = useProgress();
   const [set] = useStore((state) => [state.set]);
