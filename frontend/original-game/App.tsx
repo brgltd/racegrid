@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Layers } from "three";
 import { Canvas } from "@react-three/fiber";
-import { Physics, Debug } from "@react-three/cannon";
+import { Physics, Debug, usePlane } from "@react-three/cannon";
 import {
   Sky,
   Environment,
@@ -9,9 +9,7 @@ import {
   OrbitControls,
   Stats,
 } from "@react-three/drei";
-
 import type { DirectionalLight } from "three";
-
 import { HideMouse, Keyboard } from "./controls";
 import { Cameras } from "./effects";
 import {
@@ -42,6 +40,16 @@ import {
   PickColor,
 } from "./ui";
 import { useToggle } from "./useToggle";
+
+// @ts-ignore
+function Plane(props) {
+  const [ref] = usePlane(() => ({
+    type: "Static",
+    material: "ground",
+    ...props,
+  }));
+  return null;
+}
 
 const layers = new Layers();
 layers.enable(levelLayer);
@@ -116,11 +124,15 @@ export function App(): JSX.Element {
               position={[2, -1, 168.55]}
               rotation={[0, 0.49, Math.PI / 15]}
             />
-            <Heightmap
+
+            {/* <Heightmap
               elementSize={0.5085}
               position={[327 - 66.5, -3.3, -473 + 213]}
               rotation={[-Math.PI / 2, 0, -Math.PI]}
-            />
+            /> */}
+
+            <Plane rotation={[-Math.PI / 2, 0, 0]} userData={{ id: "floor" }} />
+
             <Goal
               args={[0.001, 10, 18]}
               onCollideBegin={onStart}
