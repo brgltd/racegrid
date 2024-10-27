@@ -9,7 +9,6 @@ import {
   OrbitControls,
   Stats,
 } from "@react-three/drei";
-import type { DirectionalLight } from "three";
 import { HideMouse, Keyboard } from "./controls";
 import { Cameras } from "./effects";
 import {
@@ -40,6 +39,8 @@ import {
   PickColor,
 } from "./ui";
 import { useToggle } from "./useToggle";
+import type { DirectionalLight } from "three";
+import { Delimeter } from "./models/delimeter";
 
 // @ts-ignore
 function Plane(props) {
@@ -118,22 +119,49 @@ export function App(): JSX.Element {
               {light && <primitive object={light.target} />}
               <Cameras />
             </Vehicle>
-            <Train />
-            <Ramp
+
+            {/* <Train /> */}
+
+            {/* <Ramp
               args={[30, 6, 8]}
               position={[2, -1, 168.55]}
               rotation={[0, 0.49, Math.PI / 15]}
-            />
+            /> */}
 
             {/* <Heightmap
               elementSize={0.5085}
               position={[327 - 66.5, -3.3, -473 + 213]}
               rotation={[-Math.PI / 2, 0, -Math.PI]}
+              // rotation={[-Math.PI / 2, 0, 0]}
             /> */}
 
             <Plane rotation={[-Math.PI / 2, 0, 0]} userData={{ id: "floor" }} />
 
-            <Goal
+            {/* <Delimeter
+              boxGeometryArgs={[0.001, 10, 18]}
+              position={[-27, 1, 180]}
+              rotation={[0, 0.55, 0]}
+            /> */}
+
+            {/* <Delimeter
+              boxGeometryArgs={[0.1, 5, 30]}
+              position={[-77, 0, 200]}
+              rotation={[0, 0.5, 0]}
+            /> */}
+
+            <Delimeter
+              boxGeometryArgs={[400, 5, 1]}
+              position={[-95, 0, 200]}
+              rotation={[0, 0.4, 0]}
+            />
+
+            {/* 
+              boxGeometryArgs={[depth, height, width]}
+              position={[left-down]}
+              rotation={[, angle]}
+            */}
+
+            {/* <Goal
               args={[0.001, 10, 18]}
               onCollideBegin={onStart}
               rotation={[0, 0.55, 0]}
@@ -150,7 +178,7 @@ export function App(): JSX.Element {
               onCollideBegin={onCheckpoint}
               rotation={[0, -0.5, 0]}
               position={[-50, 1, -5]}
-            />
+            /> */}
             <BoundingBox
               {...{ depth: 512, height: 100, position: [0, 40, 0], width: 512 }}
             />
