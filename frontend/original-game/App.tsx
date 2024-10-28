@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Layers } from "three";
 import { Canvas } from "@react-three/fiber";
-import { Physics, Debug, usePlane } from "@react-three/cannon";
+import { Physics, Debug, usePlane, useBox } from "@react-three/cannon";
 import {
   Sky,
   Environment,
@@ -40,20 +40,20 @@ import {
 } from "./ui";
 import { useToggle } from "./useToggle";
 import type { DirectionalLight } from "three";
-import { Delimeter } from "./models/delimeter";
+import { Delimiter } from "./models/delimiter";
+
+const layers = new Layers();
+layers.enable(levelLayer);
 
 // @ts-ignore
 function Plane(props) {
-  const [ref] = usePlane(() => ({
+  usePlane(() => ({
     type: "Static",
     material: "ground",
     ...props,
   }));
   return null;
 }
-
-const layers = new Layers();
-layers.enable(levelLayer);
 
 export function App(): JSX.Element {
   const [light, setLight] = useState<DirectionalLight | null>(null);
@@ -72,6 +72,15 @@ export function App(): JSX.Element {
   const ToggledMap = useToggle(Minimap, "map");
   const ToggledOrbitControls = useToggle(OrbitControls, "editor");
   const ToggledStats = useToggle(Stats, "stats");
+
+  // return (
+  //   <Canvas>
+  //     <Physics>
+  //       <Plane />
+  //       <Cube />
+  //     </Physics>
+  //   </Canvas>
+  // );
 
   return (
     <Intro>
@@ -137,29 +146,17 @@ export function App(): JSX.Element {
 
             <Plane rotation={[-Math.PI / 2, 0, 0]} userData={{ id: "floor" }} />
 
-            {/* <Delimeter
-              boxGeometryArgs={[0.001, 10, 18]}
-              position={[-27, 1, 180]}
-              rotation={[0, 0.55, 0]}
-            /> */}
-
-            {/* <Delimeter
-              boxGeometryArgs={[0.1, 5, 30]}
-              position={[-77, 0, 200]}
-              rotation={[0, 0.5, 0]}
-            /> */}
-
-            <Delimeter
-              boxGeometryArgs={[400, 5, 1]}
+            <Delimiter
+              args={[300, 3, 2]}
               position={[-95, 0, 200]}
-              rotation={[0, 0.4, 0]}
+              rotation={[0, Math.PI / 7, 0]}
             />
 
-            {/* 
-              boxGeometryArgs={[depth, height, width]}
-              position={[left-down]}
-              rotation={[, angle]}
-            */}
+            <Delimiter
+              args={[300, 3, 2]}
+              position={[-55, 0, 200]}
+              rotation={[0, Math.PI / 7, 0]}
+            />
 
             {/* <Goal
               args={[0.001, 10, 18]}
@@ -179,6 +176,7 @@ export function App(): JSX.Element {
               rotation={[0, -0.5, 0]}
               position={[-50, 1, -5]}
             /> */}
+
             <BoundingBox
               {...{ depth: 512, height: 100, position: [0, 40, 0], width: 512 }}
             />
