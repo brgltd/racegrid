@@ -137,26 +137,26 @@ export function App(): JSX.Element {
               rotation={[0, 0.49, Math.PI / 15]}
             /> */}
 
-            {/* <Heightmap
+            <Heightmap
               elementSize={0.5085}
               position={[327 - 66.5, -3.3, -473 + 213]}
               rotation={[-Math.PI / 2, 0, -Math.PI]}
               // rotation={[-Math.PI / 2, 0, 0]}
-            /> */}
+            />
 
-            <Plane rotation={[-Math.PI / 2, 0, 0]} userData={{ id: "floor" }} />
+            {/* <Plane rotation={[-Math.PI / 2, 0, 0]} userData={{ id: "floor" }} /> */}
 
-            <Delimiter
+            {/* <Delimiter
               args={[300, 3, 2]}
               position={[-95, 0, 200]}
               rotation={[0, Math.PI / 7, 0]}
-            />
+            /> */}
 
-            <Delimiter
+            {/* <Delimiter
               args={[300, 3, 2]}
               position={[-55, 0, 200]}
               rotation={[0, Math.PI / 7, 0]}
-            />
+            /> */}
 
             {/* <Goal
               args={[0.001, 10, 18]}
