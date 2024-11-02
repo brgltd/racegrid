@@ -120,9 +120,15 @@ export function Vehicle({
         : 0,
       delta * 20,
     );
-    for (i = 2; i < 4; i++)
+
+    for (i = 2; i < 4; i++) {
       api.applyEngineForce(speed < maxSpeed ? engineValue : 0, i);
-    for (i = 0; i < 2; i++) api.setSteeringValue(steeringValue, i);
+    }
+
+    for (i = 0; i < 2; i++) {
+      api.setSteeringValue(steeringValue, i);
+    }
+
     for (i = 2; i < 4; i++)
       api.setBrake(
         controls.brake ? (controls.forward ? maxBrake / 1.5 : maxBrake) : 0,
