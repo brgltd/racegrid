@@ -98,7 +98,7 @@ export function Vehicle({
     isBoosting = controls.boost && mutation.boost > 0;
 
     if (isBoosting) {
-      mutation.boost = Math.max(mutation.boost - 1, 0);
+      mutation.boost = Math.max(mutation.boost - 2, 0);
     }
 
     engineValue = lerp(
