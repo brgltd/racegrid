@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Layers } from "three";
 import { Canvas } from "@react-three/fiber";
-import { Physics, Debug, usePlane, useBox } from "@react-three/cannon";
+import { Physics, Debug, usePlane, useBox, Triplet } from "@react-three/cannon";
 import {
   Sky,
   Environment,
@@ -53,6 +53,26 @@ function Plane(props) {
     ...props,
   }));
   return null;
+}
+
+function Carpet() {
+  const args: Triplet = [20, 0.5, 19];
+  const position: Triplet = [60, 0, 134];
+  const rotation: Triplet = [0, Math.PI / 7, 0];
+  const [ref] = useBox(() => ({
+    mass: 0,
+    args,
+    position,
+    rotation,
+  }));
+  const color = "rgb(172, 82, 41)";
+  return (
+    // @ts-ignore
+    <mesh ref={ref} position={position} rotation={rotation}>
+      <boxGeometry args={args} />
+      <meshStandardMaterial color={color} />
+    </mesh>
+  );
 }
 
 export function App(): JSX.Element {
@@ -136,6 +156,8 @@ export function App(): JSX.Element {
               position={[2, -1, 168.55]}
               rotation={[0, 0.49, Math.PI / 15]}
             /> */}
+
+            <Carpet />
 
             <Heightmap
               elementSize={0.5085}
