@@ -161,12 +161,14 @@ export function App(): JSX.Element {
               rotation={[0, 0.55, 0]}
               position={[-27, 1, 180]}
             />
+
             <Goal
               args={[0.001, 10, 18]}
               onCollideBegin={onFinish}
               rotation={[0, -1.2, 0]}
               position={[-104, 1, -189]}
             />
+
             <Goal
               args={[0.001, 10, 18]}
               onCollideBegin={onCheckpoint}

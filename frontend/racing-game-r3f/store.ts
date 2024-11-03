@@ -5,12 +5,10 @@ import type { RefObject } from "react";
 import type { PublicApi, WheelInfoOptions } from "@react-three/cannon";
 import type { Group } from "three";
 import type { GetState, SetState, StateSelector } from "zustand";
-
 import { keys } from "./keys";
 
 export const angularVelocity = [0, 0.5, 0] as const;
 export const cameras = ["DEFAULT", "FIRST_PERSON", "BIRD_EYE"] as const;
-
 export const dpr = 1.5 as const;
 export const levelLayer = 1 as const;
 export const maxBoost = 100 as const;

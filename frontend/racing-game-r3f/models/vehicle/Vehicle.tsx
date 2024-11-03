@@ -189,11 +189,11 @@ export function Vehicle({
   return (
     <group>
       <Chassis ref={chassisBody} {...{ angularVelocity, position, rotation }}>
-        <ToggledAccelerateAudio />
+        {/* <ToggledAccelerateAudio />
         <BoostAudio />
         <BrakeAudio />
         <ToggledEngineAudio />
-        <HonkAudio />
+        <HonkAudio /> */}
         <Boost />
         {children}
       </Chassis>

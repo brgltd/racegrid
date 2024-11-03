@@ -96,13 +96,9 @@ export const Chassis = forwardRef<Group, PropsWithChildren<BoxProps>>(
     //   [],
     // );
 
-    const onCollide = () => {
-      // console.log("collided");
-    };
+    const onCollide = () => {};
 
-    const onCollideStart = () => {
-      console.log("oncollidestart");
-    };
+    const onCollideBegin = () => {};
 
     const [, api] = useBox(
       () => ({
@@ -110,7 +106,7 @@ export const Chassis = forwardRef<Group, PropsWithChildren<BoxProps>>(
         args,
         allowSleep: false,
         onCollide,
-        onCollideBegin: onCollideStart,
+        onCollideBegin,
         ...props,
       }),
       ref,
