@@ -143,14 +143,6 @@ export function App(): JSX.Element {
               <Cameras />
             </Vehicle>
 
-            {/* <Train /> */}
-
-            {/* <Ramp
-              args={[30, 6, 8]}
-              position={[2, -1, 168.55]}
-              rotation={[0, 0.49, Math.PI / 15]}
-            /> */}
-
             <Carpet />
 
             {isClient && (
@@ -162,8 +154,6 @@ export function App(): JSX.Element {
             )}
 
             <Plane />
-
-            {/* <Delimiter /> */}
 
             {/* <Goal
               args={[0.001, 10, 18]}
@@ -184,7 +174,7 @@ export function App(): JSX.Element {
               position={[-50, 1, -5]}
             /> */}
 
-            {/* <BoundingBox 
+            {/* <BoundingBox
               {...{ depth: 512, height: 100, position: [0, 40, 0], width: 512 }}
             /> */}
           </ToggledDebug>
