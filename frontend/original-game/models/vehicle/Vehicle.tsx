@@ -158,29 +158,29 @@ export function Vehicle({
       );
     }
 
-    // lean chassis
-    chassisBody.current!.children[0].rotation.z = MathUtils.lerp(
-      chassisBody.current!.children[0].rotation.z,
-      (-steeringValue * speed) / 200,
-      delta * 4,
-    );
+    // // lean chassis
+    // chassisBody.current!.children[0].rotation.z = MathUtils.lerp(
+    //   chassisBody.current!.children[0].rotation.z,
+    //   (-steeringValue * speed) / 200,
+    //   delta * 4,
+    // );
 
-    // Camera sway
-    swaySpeed = isBoosting ? 60 : 30;
-    swayTarget = isBoosting ? (speed / maxSpeed) * 8 : (speed / maxSpeed) * 2;
-    swayValue = isBoosting
-      ? (speed / maxSpeed + 0.25) * 30
-      : MathUtils.lerp(swayValue, swayTarget, delta * (isBoosting ? 10 : 20));
-    defaultCamera.rotation.z +=
-      (Math.sin(state.clock.elapsedTime * swaySpeed * 0.9) / 1000) * swayValue;
-    defaultCamera.rotation.x +=
-      (Math.sin(state.clock.elapsedTime * swaySpeed) / 1000) * swayValue;
+    // // Camera sway
+    // swaySpeed = isBoosting ? 60 : 30;
+    // swayTarget = isBoosting ? (speed / maxSpeed) * 8 : (speed / maxSpeed) * 2;
+    // swayValue = isBoosting
+    //   ? (speed / maxSpeed + 0.25) * 30
+    //   : MathUtils.lerp(swayValue, swayTarget, delta * (isBoosting ? 10 : 20));
+    // defaultCamera.rotation.z +=
+    //   (Math.sin(state.clock.elapsedTime * swaySpeed * 0.9) / 1000) * swayValue;
+    // defaultCamera.rotation.x +=
+    //   (Math.sin(state.clock.elapsedTime * swaySpeed) / 1000) * swayValue;
 
     // Vibrations
-    chassisBody.current!.children[0].rotation.x =
-      (Math.sin(state.clock.getElapsedTime() * 20) * (speed / maxSpeed)) / 100;
-    chassisBody.current!.children[0].rotation.z =
-      (Math.cos(state.clock.getElapsedTime() * 20) * (speed / maxSpeed)) / 100;
+    // chassisBody.current!.children[0].rotation.x =
+    //   (Math.sin(state.clock.getElapsedTime() * 20) * (speed / maxSpeed)) / 100;
+    // chassisBody.current!.children[0].rotation.z =
+    //   (Math.cos(state.clock.getElapsedTime() * 20) * (speed / maxSpeed)) / 100;
   });
 
   const ToggledAccelerateAudio = useToggle(AccelerateAudio, ["ready", "sound"]);
