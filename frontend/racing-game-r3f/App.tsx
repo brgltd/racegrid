@@ -41,16 +41,17 @@ import {
 import { useToggle } from "./useToggle";
 import type { DirectionalLight } from "three";
 import { Delimiter } from "./models/delimiter";
+import { useAppContext } from "@/hooks/use-app-context";
 
 const layers = new Layers();
 layers.enable(levelLayer);
 
-// @ts-ignore
-function Plane(props) {
+function Plane() {
   usePlane(() => ({
     type: "Static",
     material: "ground",
-    ...props,
+    rotation: [-Math.PI / 2, 0, 0],
+    userData: { id: "floor" },
   }));
   return null;
 }
@@ -93,14 +94,7 @@ export function App(): JSX.Element {
   const ToggledOrbitControls = useToggle(OrbitControls, "editor");
   const ToggledStats = useToggle(Stats, "stats");
 
-  // return (
-  //   <Canvas>
-  //     <Physics>
-  //       <Plane />
-  //       <Cube />
-  //     </Physics>
-  //   </Canvas>
-  // );
+  const { isClient } = useAppContext();
 
   return (
     <Intro>
@@ -159,13 +153,15 @@ export function App(): JSX.Element {
 
             <Carpet />
 
-            <Heightmap
-              elementSize={0.5085}
-              position={[327 - 66.5, -3.3, -473 + 213]}
-              rotation={[-Math.PI / 2, 0, -Math.PI]}
-            />
+            {isClient && (
+              <Heightmap
+                elementSize={0.5085}
+                position={[327 - 66.5, -3.3, -473 + 213]}
+                rotation={[-Math.PI / 2, 0, -Math.PI]}
+              />
+            )}
 
-            <Plane rotation={[-Math.PI / 2, 0, 0]} userData={{ id: "floor" }} />
+            <Plane />
 
             {/* <Delimiter /> */}
 
