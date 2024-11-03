@@ -26,7 +26,8 @@ export const vehicleConfig = {
   force: 1800,
   maxBrake: 65,
   // maxSpeed: 88,
-  maxSpeed: 50,
+  // maxSpeed: 50,
+  maxSpeed: 40,
   // maxSpeed: 35,
 } as const;
 
