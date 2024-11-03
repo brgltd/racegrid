@@ -174,9 +174,9 @@ export function App(): JSX.Element {
               position={[-50, 1, -5]}
             /> */}
 
-            {/* <BoundingBox
+            <BoundingBox
               {...{ depth: 512, height: 100, position: [0, 40, 0], width: 512 }}
-            /> */}
+            />
           </ToggledDebug>
         </Physics>
         <Track />
