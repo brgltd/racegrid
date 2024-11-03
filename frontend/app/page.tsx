@@ -1,7 +1,5 @@
-import { Game } from "@/components/game";
-import { OriginalGame } from "@/components/original-game";
+import { RacingGameR3F } from "@/components/racing-game-r3f";
 
 export default function HomePage() {
-  // return <Game />
-  return <OriginalGame />;
+  return <RacingGameR3F />;
 }
