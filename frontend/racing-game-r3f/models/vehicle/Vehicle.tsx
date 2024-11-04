@@ -2,14 +2,12 @@ import { MathUtils, Vector3 } from "three";
 import { useLayoutEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useRaycastVehicle } from "@react-three/cannon";
-
 import type { PropsWithChildren } from "react";
 import type {
   BoxProps,
   RaycastVehicleProps,
   WheelInfoOptions,
 } from "@react-three/cannon";
-
 import {
   AccelerateAudio,
   BoostAudio,
@@ -24,11 +22,7 @@ import { getState, mutation, useStore } from "../../store";
 import { useToggle } from "../../useToggle";
 import { Chassis } from "./Chassis";
 import { Wheel } from "./Wheel";
-
 import type { Camera, Controls, WheelInfo } from "../../store";
-
-const { lerp } = MathUtils;
-const v = new Vector3();
 
 type VehicleProps = PropsWithChildren<
   Pick<BoxProps, "angularVelocity" | "position" | "rotation">
@@ -37,6 +31,9 @@ type DerivedWheelInfo = WheelInfo &
   Required<
     Pick<WheelInfoOptions, "chassisConnectionPointLocal" | "isFrontWheel">
   >;
+
+const { lerp } = MathUtils;
+const v = new Vector3();
 
 export function Vehicle({
   angularVelocity,
