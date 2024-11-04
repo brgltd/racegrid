@@ -21,6 +21,8 @@ export default function Card() {
           </option>
         ))}
       </select>
+      <div>Cost: 0.001 ETH</div>
+      <button>mint</button>
     </div>
   );
 }
