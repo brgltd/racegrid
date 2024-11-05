@@ -4,12 +4,19 @@ pragma solidity ^0.8.26;
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract RaceGridNFT is ERC721 {
+    error InsufficientFee(uint256 receivedValue);
+
+    uint256 private constant FEE = 0.01e18;
+
     uint256 public counter;
     mapping(uint256 id => string uri) tokens;
 
     constructor() ERC721("RaceGrid", "RCG") {}
 
-    function mint(string memory uri) public {
+    function mint(string memory uri) public payable {
+        if (msg.value < FEE) {
+            revert InsufficientFee(msg.value);
+        }
         tokens[counter] = uri;
         _safeMint(msg.sender, counter);
         ++counter;

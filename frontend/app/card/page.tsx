@@ -21,7 +21,9 @@ export default function Card() {
           </option>
         ))}
       </select>
-      <div>Cost: 0.001 ETH</div>
+      {/* 0.01 ETH ~30usd */}
+      {/* profit for winnint a track will be 0.002eth =  */}
+      <div>Cost: 0.01 ETH</div>
       <button>mint</button>
     </div>
   );
