@@ -15,28 +15,27 @@ export type Chain = {
   name: string;
   img: number;
   definition: Definition;
-  upgradeableBasicNft: Address;
+  raceGridNFT: Address;
 };
 
 type SupportedChainsMap = Record<number, Chain>;
 
-const bscChain = {
-  chainSelector: 1007,
-  name: "BSC Testnet",
-  img: 9195,
-  definition: bscTestnet,
-  upgradeableBasicNft: Constants.BSCTestnet.UpgradeableBasicNft,
-};
+// const bscChain = {
+//   chainSelector: 1007,
+//   name: "BSC Testnet",
+//   img: 9195,
+//   definition: bscTestnet,
+// };
 
 const anvilChain = {
   chainSelector: 31337,
   name: "Anvil",
   img: 9195,
   definition: anvil,
-  upgradeableBasicNft: Constants.Anvil.UpgradeableBasicNft,
+  raceGridNFT: Constants.Anvil.RaceGridNFT,
 };
 
-const supportedChains: Chain[] = [bscChain, anvilChain];
+const supportedChains: Chain[] = [anvilChain];
 
 // const supportedChains: Chain[] = [
 //   // bscChain,

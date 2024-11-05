@@ -1,6 +1,11 @@
 "use client";
 
+import { raceGridNftAbi } from "@/abis";
+import { config } from "@/chains";
+import { Constants } from "@/constants";
+import { waitForTransactionReceipt } from "@wagmi/core";
 import { useState } from "react";
+import { useWriteContract } from "wagmi";
 
 const colors = [
   "red",
@@ -14,8 +19,31 @@ const colors = [
   "gray",
 ];
 
+function getTokenURI(color: string) {
+  return `http://localhost:3000/nfts/${color}.png`;
+}
+
 export default function Card() {
   const [color, setColor] = useState("");
+
+  const { writeContractAsync } = useWriteContract();
+
+  const onClickMint = async () => {
+    try {
+      const hash = await writeContractAsync({
+        address: Constants.Anvil.RaceGridNFT,
+        abi: raceGridNftAbi,
+        functionName: "mint",
+        args: [getTokenURI(color)],
+      });
+      await waitForTransactionReceipt(config, {
+        hash,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <div>Choose the color for your car</div>
@@ -34,7 +62,7 @@ export default function Card() {
       {/* 0.01 ETH ~30usd */}
       {/* profit for winning a track will be 0.002eth = ~6usd */}
       <div>Cost: 0.01 ETH</div>
-      <button>mint</button>
+      <button onClick={onClickMint}>mint</button>
     </div>
   );
 }
