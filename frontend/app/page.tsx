@@ -1,5 +1,14 @@
-import { RacingGameR3F } from "@/components/racing-game-r3f";
+import Link from "next/link";
 
 export default function HomePage() {
-  return <RacingGameR3F />;
+  return (
+    <div>
+      <ul>
+        <li>
+          <Link href="/challenge">Play Challenge</Link>
+        </li>
+        <li>Multiplayer (Comming Soon)</li>
+      </ul>
+    </div>
+  );
 }

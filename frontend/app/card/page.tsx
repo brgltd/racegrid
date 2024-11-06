@@ -59,8 +59,6 @@ export default function Card() {
           </option>
         ))}
       </select>
-      {/* 0.01 ETH ~30usd */}
-      {/* profit for winning a track will be 0.002eth = ~6usd */}
       <div>Cost: 0.01 ETH</div>
       <button onClick={onClickMint}>mint</button>
     </div>
