@@ -8,7 +8,7 @@ import { useState } from "react";
 import { parseUnits } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
 
-const colors = [
+export const colors = [
   "red",
   "green",
   "blue",
