@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Layers } from "three";
 import { Canvas } from "@react-three/fiber";
 import { Physics, Debug, usePlane, useBox, Triplet } from "@react-three/cannon";
@@ -82,7 +82,6 @@ export function App(): JSX.Element {
   const ToggledCheckpoint = useToggle(Checkpoint, "checkpoint");
   const ToggledDebug = useToggle(Debug, "debug");
   const ToggledEditor = useToggle(Editor, "editor");
-  const ToggledFinished = useToggle(Finished, "finished");
   const ToggledMap = useToggle(Minimap, "map");
   const ToggledOrbitControls = useToggle(OrbitControls, "editor");
   const ToggledStats = useToggle(Stats, "stats");
@@ -177,7 +176,6 @@ export function App(): JSX.Element {
       </Canvas>
       <Clock />
       <ToggledEditor />
-      <ToggledFinished />
       <Help />
       <Speed />
       <ToggledStats />

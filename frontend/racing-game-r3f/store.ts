@@ -229,8 +229,6 @@ const useStoreImpl = create<IState>(
         set({ finished: 0, start: Date.now() });
       },
       reset: () => {
-        set({ finished: 0, start: Date.now() });
-
         mutation.boost = maxBoost;
 
         set((state) => {
