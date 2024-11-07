@@ -11,7 +11,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ThemeProvider, createTheme } from "@mui/material/styles";
 // import CssBaseline from "@mui/material/CssBaseline";
 import { wagmiConfig } from "@/chains";
-// import { Navbar } from "@/components/navbar";
 // import { Toast } from "@/components/toast";
 // import { Footer } from "@/components/footer";
 import "@rainbow-me/rainbowkit/styles.css";
@@ -83,6 +82,7 @@ export function AppLayout({
           <QueryClientProvider client={queryClient}>
             <RainbowKitProvider theme={rainbowDarkTheme()}>
               <AppProvider>
+                <Navbar />
                 <main className="main">{children}</main>
               </AppProvider>
             </RainbowKitProvider>
