@@ -167,6 +167,9 @@ export interface IState extends BaseState {
     RefObject<Group>,
   ];
   keyInput: string | null;
+
+  startTime: number;
+  endTime: number;
 }
 
 const setExclusiveBoolean = (set: Setter, boolean: ExclusiveBoolean) => () =>
@@ -226,6 +229,8 @@ const useStoreImpl = create<IState>(
         set({ finished: 0, start: Date.now() });
       },
       reset: () => {
+        set({ finished: 0, start: Date.now() });
+
         mutation.boost = maxBoost;
 
         set((state) => {
@@ -267,6 +272,9 @@ const useStoreImpl = create<IState>(
         createRef<Group>(),
         createRef<Group>(),
       ],
+
+      startTime: 0,
+      endTime: 0,
     };
   },
 );

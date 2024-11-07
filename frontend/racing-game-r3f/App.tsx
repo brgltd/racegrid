@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Layers } from "three";
 import { Canvas } from "@react-three/fiber";
 import { Physics, Debug, usePlane, useBox, Triplet } from "@react-three/cannon";
@@ -11,15 +11,7 @@ import {
 } from "@react-three/drei";
 import { HideMouse, Keyboard } from "./controls";
 import { Cameras } from "./effects";
-import {
-  BoundingBox,
-  Ramp,
-  Track,
-  Vehicle,
-  Goal,
-  Train,
-  Heightmap,
-} from "./models";
+import { BoundingBox, Track, Vehicle, Goal, Heightmap } from "./models";
 import {
   angularVelocity,
   levelLayer,
@@ -40,8 +32,8 @@ import {
 } from "./ui";
 import { useToggle } from "./useToggle";
 import type { DirectionalLight } from "three";
-import { Delimiter } from "./models/delimiter";
-import { useAppContext } from "@/hooks/use-app-context";
+import { useRouter } from "next/navigation";
+import { Clock } from "./ui/Clock";
 
 const layers = new Layers();
 layers.enable(levelLayer);
@@ -84,7 +76,8 @@ export function App(): JSX.Element {
     s.editor,
     s.shadows,
   ]);
-  const { onCheckpoint, onFinish, onStart } = actions;
+
+  const { onStart, onFinish } = actions;
 
   const ToggledCheckpoint = useToggle(Checkpoint, "checkpoint");
   const ToggledDebug = useToggle(Debug, "debug");
@@ -93,6 +86,13 @@ export function App(): JSX.Element {
   const ToggledMap = useToggle(Minimap, "map");
   const ToggledOrbitControls = useToggle(OrbitControls, "editor");
   const ToggledStats = useToggle(Stats, "stats");
+
+  const router = useRouter();
+
+  const onFinishRace = () => {
+    onFinish();
+    router.push("/result");
+  };
 
   return (
     <Intro>
@@ -151,7 +151,7 @@ export function App(): JSX.Element {
 
             <Plane />
 
-            {/* <Goal
+            <Goal
               args={[0.001, 10, 18]}
               onCollideBegin={onStart}
               rotation={[0, 0.55, 0]}
@@ -160,17 +160,10 @@ export function App(): JSX.Element {
 
             <Goal
               args={[0.001, 10, 18]}
-              onCollideBegin={onFinish}
+              onCollideBegin={onFinishRace}
               rotation={[0, -1.2, 0]}
               position={[-104, 1, -189]}
             />
-
-            <Goal
-              args={[0.001, 10, 18]}
-              onCollideBegin={onCheckpoint}
-              rotation={[0, -0.5, 0]}
-              position={[-50, 1, -5]}
-            /> */}
 
             <BoundingBox
               {...{ depth: 512, height: 100, position: [0, 40, 0], width: 512 }}
@@ -182,6 +175,7 @@ export function App(): JSX.Element {
         <ToggledMap />
         <ToggledOrbitControls />
       </Canvas>
+      <Clock />
       <ToggledEditor />
       <ToggledFinished />
       <Help />
