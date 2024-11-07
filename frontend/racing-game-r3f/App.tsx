@@ -94,8 +94,6 @@ export function App(): JSX.Element {
   const ToggledOrbitControls = useToggle(OrbitControls, "editor");
   const ToggledStats = useToggle(Stats, "stats");
 
-  const { isClient } = useAppContext();
-
   return (
     <Intro>
       <Canvas
@@ -145,13 +143,11 @@ export function App(): JSX.Element {
 
             <Carpet />
 
-            {isClient && (
-              <Heightmap
-                elementSize={0.5085}
-                position={[327 - 66.5, -3.3, -473 + 213]}
-                rotation={[-Math.PI / 2, 0, -Math.PI]}
-              />
-            )}
+            <Heightmap
+              elementSize={0.5085}
+              position={[327 - 66.5, -3.3, -473 + 213]}
+              rotation={[-Math.PI / 2, 0, -Math.PI]}
+            />
 
             <Plane />
 
