@@ -3,9 +3,11 @@
 import { raceGridNftAbi } from "@/abis";
 import { config } from "@/chains";
 import { Constants } from "@/constants";
+import { useAppContext } from "@/hooks/use-app-context";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { useState } from "react";
-import { useWriteContract } from "wagmi";
+import { parseUnits } from "viem";
+import { useReadContract, useWriteContract } from "wagmi";
 
 const colors = [
   "red",
@@ -20,24 +22,39 @@ const colors = [
 ];
 
 function getTokenURI(color: string) {
-  return `http://localhost:3000/nfts/${color}.png`;
+  return `http://localhost:3000/nfts/${color}.json`;
 }
 
 export default function Card() {
-  const [color, setColor] = useState("");
+  const [color, setColor] = useState("red");
 
   const { writeContractAsync } = useWriteContract();
+
+  const { sourceChain, userAddress } = useAppContext();
+
+  const { data: userToken } = useReadContract({
+    address: sourceChain?.raceGridNFT,
+    abi: raceGridNftAbi,
+    functionName: "userToTokenURI",
+    // @ts-ignore
+    args: [userAddress],
+    chainId: sourceChain?.definition?.id,
+    query: { enabled: !!sourceChain },
+  });
 
   const onClickMint = async () => {
     try {
       const hash = await writeContractAsync({
-        address: Constants.Anvil.RaceGridNFT,
+        address: sourceChain?.raceGridNFT,
         abi: raceGridNftAbi,
         functionName: "mint",
         args: [getTokenURI(color)],
+        chainId: sourceChain?.definition?.id,
+        value: parseUnits("0.01", 18),
       });
       await waitForTransactionReceipt(config, {
         hash,
+        chainId: sourceChain.definition?.id,
       });
     } catch (error) {
       console.log(error);
@@ -61,6 +78,9 @@ export default function Card() {
       </select>
       <div>Cost: 0.01 ETH</div>
       <button onClick={onClickMint}>mint</button>
+
+      <hr />
+      <div>user token: {userToken || "none"}</div>
     </div>
   );
 }

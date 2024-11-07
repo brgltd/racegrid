@@ -29,3 +29,7 @@ forge script script/UpdateUpgradeableBasicNft.s.sol:UpdateUpgradeableBasicNft --
 ```bash
 forge script script/MintUpgradeableBasicNft.s.sol:MintUpgradeableBasicNft --rpc-url $LOCAL_ANVIL_RPC_URL --broadcast -vvvv
 ```
+
+### misc
+
+forge script script/DeployRaceGridNFT.s.sol:DeployRaceGridNFT --rpc-url $LOCAL_ANVIL_RPC_URL --broadcast -vvvv

@@ -10,6 +10,7 @@ contract RaceGridNFT is ERC721 {
 
     mapping(uint256 id => string uri) public tokenIdToURI;
 
+    /// @notice Last token owned by an address.
     mapping(address user => string uri) public userToTokenURI;
 
     constructor() ERC721("RaceGrid", "RCG") {}
@@ -20,5 +21,9 @@ contract RaceGridNFT is ERC721 {
         userToTokenURI[msg.sender] = uri;
         _safeMint(msg.sender, tokenId);
         ++tokenId;
+    }
+
+    function tokenURI(uint256 id) public view override returns (string memory) {
+        return tokenIdToURI[id];
     }
 }
