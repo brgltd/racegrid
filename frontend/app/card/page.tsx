@@ -2,7 +2,6 @@
 
 import { raceGridNftAbi } from "@/abis";
 import { config } from "@/chains";
-import { Constants } from "@/constants";
 import { useAppContext } from "@/hooks/use-app-context";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { useState } from "react";
@@ -22,11 +21,18 @@ const colors = [
 ];
 
 function getTokenURI(color: string) {
-  return `http://localhost:3000/nfts/${color}.json`;
+  const prefix =
+    process.env.NODE_ENV === "production"
+      ? "https://racegrid.vercel.app"
+      : "http://localhost:3000";
+  const suffix = `/nfts/${color}.json`;
+  return `${prefix}${suffix}`;
 }
 
 export default function Card() {
   const [color, setColor] = useState("red");
+
+  console.log(getTokenURI(color));
 
   const { writeContractAsync } = useWriteContract();
 
