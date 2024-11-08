@@ -249,12 +249,12 @@ export const Chassis = forwardRef<Group, PropsWithChildren<BoxProps>>(
           />
         </group>
         {children}
-        <PositionalAudio
+        {/* <PositionalAudio
           ref={crashAudio}
           url="/sounds/crash.mp3"
           loop={false}
           distance={5}
-        />
+        /> */}
       </group>
     );
   },

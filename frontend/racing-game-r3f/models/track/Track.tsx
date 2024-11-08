@@ -119,12 +119,12 @@ export function Track(): JSX.Element {
             roughness={0}
             side={DoubleSide}
           />
-          <ToggledPositionalAudio
+          {/* <ToggledPositionalAudio
             url="/sounds/water.mp3"
             loop
             autoplay
             distance={10}
-          />
+          /> */}
         </mesh>
       </group>
       <group ref={birds}>
