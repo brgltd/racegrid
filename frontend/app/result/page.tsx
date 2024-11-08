@@ -14,8 +14,34 @@ export default function Result() {
   return (
     <div>
       <div>Congratulations!</div>
-      <div>You've finished the race is less than 1 minute and will...</div>
-      <div>loading action</div>
+      <div>You've finished the race in xyz</div>
+      <button>UPDATE LEADERBOARD</button>
+
+      <h1>Challenge Leaderboard</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Medal</th>
+            <th>Time</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>x</td>
+            <td>x</td>
+            <td>x</td>
+            <td>x</td>
+          </tr>
+          <tr>
+            <td>x</td>
+            <td>x</td>
+            <td>x</td>
+            <td>x</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }

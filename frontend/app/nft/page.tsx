@@ -32,8 +32,6 @@ function getTokenURI(color: string) {
 export default function Card() {
   const [color, setColor] = useState("red");
 
-  console.log(getTokenURI(color));
-
   const { writeContractAsync } = useWriteContract();
 
   const { sourceChain, userAddress } = useAppContext();
@@ -56,7 +54,6 @@ export default function Card() {
         functionName: "mint",
         args: [getTokenURI(color)],
         chainId: sourceChain?.definition?.id,
-        value: parseUnits("0.01", 18),
       });
       await waitForTransactionReceipt(config, {
         hash,

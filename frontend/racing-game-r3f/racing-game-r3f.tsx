@@ -183,7 +183,6 @@ export function RacingGameR3F(): JSX.Element {
       <ToggledCheckpoint />
       <LeaderBoard />
       <PickColor />
-      <HideMouse />
       <Keyboard />
     </Intro>
   );

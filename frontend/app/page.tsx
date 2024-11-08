@@ -42,7 +42,7 @@ export default function HomePage() {
           <Link href="/challenge">Play Challenge</Link>
         </li>
         <li>
-          <Link href="/card">Purchase NFT</Link>
+          <Link href="/nft">Purchase NFT</Link>
         </li>
         <li>Multiplayer (Coming Soon)</li>
       </ul>
