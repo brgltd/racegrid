@@ -68,8 +68,11 @@ function Carpet() {
   );
 }
 
-export function App(): JSX.Element {
+export function RacingGameR3F(): JSX.Element {
   const [light, setLight] = useState<DirectionalLight | null>(null);
+
+  const router = useRouter();
+
   const [actions, dpr, editor, shadows] = useStore((s) => [
     s.actions,
     s.dpr,
@@ -85,8 +88,6 @@ export function App(): JSX.Element {
   const ToggledMap = useToggle(Minimap, "map");
   const ToggledOrbitControls = useToggle(OrbitControls, "editor");
   const ToggledStats = useToggle(Stats, "stats");
-
-  const router = useRouter();
 
   const onFinishRace = () => {
     onFinish();

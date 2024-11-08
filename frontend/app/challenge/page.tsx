@@ -1,5 +1,5 @@
-import { RacingGameR3F } from "@/components/racing-game-r3f";
+import { RacingGame } from "@/components/racing-game-r3f";
 
-export default function HomePage() {
-  return <RacingGameR3F />;
+export default function Challenge() {
+  return <RacingGame />;
 }

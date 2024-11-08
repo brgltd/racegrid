@@ -1,7 +1,8 @@
 "use client";
 
-import { App } from "@/racing-game-r3f/App";
+import { RacingGameR3F } from "@/racing-game-r3f/racing-game-r3f";
 
-export function RacingGameR3F() {
-  return <App />;
+// Leave a component as a wrapper in case comparing different games or comparing game states.
+export function RacingGame() {
+  return <RacingGameR3F />;
 }
