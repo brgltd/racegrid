@@ -3,7 +3,7 @@
 import { setState, useStore } from "@/racing-game-r3f/store";
 import { useEffect, useState } from "react";
 
-export default function Result() {
+export default function LeaderboardPage() {
   const [finished] = useStore((s) => [s.finished]);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function Result() {
       <div>You've finished the race in xyz</div>
       <button>UPDATE LEADERBOARD</button>
 
-      <h1>Challenge Leaderboard</h1>
+      <h1>Leaderboard</h1>
       <table>
         <thead>
           <tr>
