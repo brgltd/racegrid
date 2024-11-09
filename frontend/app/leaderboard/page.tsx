@@ -8,7 +8,7 @@ import { waitForTransactionReceipt } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { InstancedMesh } from "three";
 import { Address } from "viem";
-import { useReadContract, useWriteContract } from "wagmi";
+import { useReadContract, useReadContracts, useWriteContract } from "wagmi";
 
 interface LeaderboardData {
   player: string;
@@ -18,32 +18,33 @@ interface LeaderboardData {
 
 export default function LeaderboardPage() {
   const [finished] = useStore((s) => [s.finished]);
-  const [leaderboardData, setLeaderbordData] = useState<LeaderboardData[]>([]);
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>([]);
 
   const { sourceChain, userAddress } = useAppContext();
 
   const { writeContractAsync } = useWriteContract();
 
-  // to handle chunking and sorting might need to use viem directly
-  // const { data: userToken } = useReadContract({
-  //   address: sourceChain?.raceGridNFT,
-  //   abi: raceGridNftAbi,
-  //   functionName: "getResultsPaginated",
-  //   // @ts-ignore
-  //   args: [userAddress],
-  //   chainId: sourceChain?.definition?.id,
-  //   query: { enabled: !!sourceChain },
-  // });
+  const { data: leaderboardLength } = useReadContract({
+    address: sourceChain?.leaderboard,
+    abi: leaderboardAbi,
+    functionName: "getResultsLength",
+    chainId: sourceChain?.definition?.id,
+    query: { enabled: !!sourceChain },
+  });
 
   useEffect(() => {
-    const getChunckedLeaderboardData = async () => {
-      // TODO
-    };
-
     console.log(finished);
     setState({ finished: 0 });
-    getChunckedLeaderboardData();
   }, []);
+
+  // TODO: verify this runs only once
+  useEffect(() => {
+    const getChunckedLeaderboardData = async () => {
+      // TODO add chunking
+    };
+
+    getChunckedLeaderboardData();
+  }, [leaderboardLength]);
 
   const onClickUpdateLeaderboard = async () => {
     // Currently open for hackathon. For any mainnet deployment `updateLeaderboard` should be updated to be `onlyOnwer`.
@@ -59,7 +60,13 @@ export default function LeaderboardPage() {
       chainId: sourceChain?.definition?.id,
     });
 
-    // TODO: update UI in memory here
+    // TODO: handle sorting on init and in-memory updates
+    const newLeaderboardItem = {
+      player: userAddress,
+      time: finished,
+      date: Math.floor(Date.now() / 1000),
+    } as LeaderboardData;
+    setLeaderboardData([...leaderboardData, newLeaderboardItem]);
   };
 
   return (
@@ -79,18 +86,6 @@ export default function LeaderboardPage() {
           </tr>
         </thead>
         <tbody>
-          {/* <tr>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-          </tr>
-          <tr>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-            <td>x</td>
-          </tr> */}
           {leaderboardData.map((item) => (
             <tr key={`${item.player}-${item.date}`}>
               <td>{item.player}</td>
