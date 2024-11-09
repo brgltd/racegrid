@@ -16,6 +16,7 @@ export type Chain = {
   img: number;
   definition: Definition;
   raceGridNFT: Address;
+  leaderboard: Address;
 };
 
 type SupportedChainsMap = Record<number, Chain>;
@@ -33,6 +34,7 @@ const anvilChain = {
   img: 9195,
   definition: anvil,
   raceGridNFT: Constants.Anvil.RaceGridNFT,
+  leaderboard: Constants.Anvil.Leaderboard,
 };
 
 const supportedChains: Chain[] = [anvilChain];

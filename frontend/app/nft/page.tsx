@@ -5,6 +5,7 @@ import { config } from "@/chains";
 import { useAppContext } from "@/hooks/use-app-context";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { useState } from "react";
+import { Address } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
 
 export const colors = [
@@ -39,8 +40,7 @@ export default function Card() {
     address: sourceChain?.raceGridNFT,
     abi: raceGridNftAbi,
     functionName: "userToTokenURI",
-    // @ts-ignore
-    args: [userAddress],
+    args: [userAddress as Address],
     chainId: sourceChain?.definition?.id,
     query: { enabled: !!sourceChain },
   });

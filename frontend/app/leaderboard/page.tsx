@@ -1,15 +1,20 @@
 "use client";
 
-import { raceGridNftAbi } from "@/abis";
+import { leaderboardAbi, raceGridNftAbi } from "@/abis";
+import { config } from "@/chains";
 import { useAppContext } from "@/hooks/use-app-context";
 import { setState, useStore } from "@/racing-game-r3f/store";
+import { waitForTransactionReceipt } from "@wagmi/core";
 import { useEffect, useState } from "react";
-import { useReadContract } from "wagmi";
+import { Address } from "viem";
+import { useReadContract, useWriteContract } from "wagmi";
 
 export default function LeaderboardPage() {
   const [finished] = useStore((s) => [s.finished]);
 
-  const { sourceChain } = useAppContext();
+  const { sourceChain, userAddress } = useAppContext();
+
+  const { writeContractAsync } = useWriteContract();
 
   // to handle chunking and sorting might need to use viem directly
   // const { data: userToken } = useReadContract({
@@ -32,11 +37,28 @@ export default function LeaderboardPage() {
     getChunckedLeaderboardData();
   }, []);
 
+  const onClickUpdateLeaderboard = async () => {
+    // Currently open for hackathon. For any mainnet deployment `updateLeaderboard` should be updated to be `onlyOnwer`.
+    const hash = await writeContractAsync({
+      address: sourceChain?.leaderboard,
+      abi: leaderboardAbi,
+      functionName: "updateLeaderboard",
+      args: [userAddress as Address, BigInt(finished)],
+      chainId: sourceChain?.definition?.id,
+    });
+    await waitForTransactionReceipt(config, {
+      hash,
+      chainId: sourceChain?.definition?.id,
+    });
+
+    // TODO: update UI in memory here
+  };
+
   return (
     <div>
       <div>Congratulations!</div>
       <div>You've finished the race in xyz</div>
-      <button>UPDATE LEADERBOARD</button>
+      <button onClick={onClickUpdateLeaderboard}>UPDATE LEADERBOARD</button>
 
       <h1>Leaderboard</h1>
       <table>
