@@ -5,7 +5,6 @@ import { config } from "@/chains";
 import { useAppContext } from "@/hooks/use-app-context";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { useState } from "react";
-import { parseUnits } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
 
 export const colors = [
