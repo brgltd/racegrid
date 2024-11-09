@@ -6,11 +6,19 @@ import { useAppContext } from "@/hooks/use-app-context";
 import { setState, useStore } from "@/racing-game-r3f/store";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { useEffect, useState } from "react";
+import { InstancedMesh } from "three";
 import { Address } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
 
+interface LeaderboardData {
+  player: string;
+  time: number;
+  date: number;
+}
+
 export default function LeaderboardPage() {
   const [finished] = useStore((s) => [s.finished]);
+  const [leaderboardData, setLeaderbordData] = useState<LeaderboardData[]>([]);
 
   const { sourceChain, userAddress } = useAppContext();
 
@@ -71,7 +79,7 @@ export default function LeaderboardPage() {
           </tr>
         </thead>
         <tbody>
-          <tr>
+          {/* <tr>
             <td>x</td>
             <td>x</td>
             <td>x</td>
@@ -82,7 +90,15 @@ export default function LeaderboardPage() {
             <td>x</td>
             <td>x</td>
             <td>x</td>
-          </tr>
+          </tr> */}
+          {leaderboardData.map((item) => (
+            <tr key={`${item.player}-${item.date}`}>
+              <td>{item.player}</td>
+              <td>gold</td>
+              <td>{item.time}</td>
+              <td>{item.date}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
