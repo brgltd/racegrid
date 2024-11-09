@@ -1,4 +1,49 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Leaderboard
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const leaderboardAbi = [
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getResultsLength',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'startIndex', internalType: 'uint256', type: 'uint256' },
+      { name: 'endIndex', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'getResultsPaginated',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct Leaderboard.Result[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'player', internalType: 'address', type: 'address' },
+          { name: 'time', internalType: 'uint256', type: 'uint256' },
+          { name: 'date', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'player', internalType: 'address', type: 'address' },
+      { name: 'time', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'updateLeaderboard',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RaceGridNFT
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -43,7 +88,7 @@ export const raceGridNftAbi = [
     inputs: [{ name: 'uri', internalType: 'string', type: 'string' }],
     name: 'mint',
     outputs: [],
-    stateMutability: 'payable',
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -115,7 +160,7 @@ export const raceGridNftAbi = [
   },
   {
     type: 'function',
-    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    inputs: [{ name: 'id', internalType: 'uint256', type: 'uint256' }],
     name: 'tokenURI',
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
     stateMutability: 'view',

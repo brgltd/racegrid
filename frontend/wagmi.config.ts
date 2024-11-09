@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     foundry({
       project: "../contracts",
-      include: ["RaceGridNFT.sol/**"],
+      include: ["RaceGridNFT.sol/**", "Leaderboard.sol/**"],
     }),
   ],
 });

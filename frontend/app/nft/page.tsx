@@ -19,7 +19,7 @@ export const colors = [
   "gray",
 ];
 
-function getTokenURI(color: string) {
+function buildTokenURI(color: string) {
   const prefix =
     process.env.NODE_ENV === "production"
       ? "https://racegrid.vercel.app"
@@ -51,7 +51,7 @@ export default function Card() {
         address: sourceChain?.raceGridNFT,
         abi: raceGridNftAbi,
         functionName: "mint",
-        args: [getTokenURI(color)],
+        args: [buildTokenURI(color)],
         chainId: sourceChain?.definition?.id,
       });
       await waitForTransactionReceipt(config, {
