@@ -18,6 +18,8 @@ interface LeaderboardData {
   timestamp: number;
 }
 
+// type IntermediaryLeaderboardData = Omit<LeaderboardData, "date">
+
 interface Hex {
   type: "BigNumber";
   hex: string;
@@ -50,7 +52,7 @@ function parseLeaderboardResponse(
 }
 
 function sortLeaderboardData(leaderboardData: LeaderboardData[]) {
-  leaderboardData.sort((a, b) => a.time - b.time);
+  leaderboardData.sort((a, b) => a.timestamp - b.timestamp);
 }
 
 export default function LeaderboardPage() {
@@ -107,12 +109,19 @@ export default function LeaderboardPage() {
       chainId: sourceChain?.definition?.id,
     });
 
+    const timestampSeconds = Math.floor(Date.now() / 1000);
     const newLeaderboardItem = {
       player: userAddress,
       time: finished,
-      date: Math.floor(Date.now() / 1000),
+      date: timestampSeconds,
+      timestamp: timestampSeconds,
     } as LeaderboardData;
-    const newLeaderboardData = [...leaderboardData, newLeaderboardItem];
+    const formattedNewLeaderboardItem =
+      formatLeaderboardData(newLeaderboardItem);
+    const newLeaderboardData = [
+      ...leaderboardData,
+      formattedNewLeaderboardItem,
+    ];
     sortLeaderboardData(newLeaderboardData);
     setLeaderboardData([...leaderboardData, newLeaderboardItem]);
   };
