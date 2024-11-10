@@ -2,6 +2,7 @@
 
 import { leaderboardAbi, raceGridNftAbi } from "@/abis";
 import { config } from "@/chains";
+import { Chains, getLeaderboardContract } from "@/ethers";
 import { useAppContext } from "@/hooks/use-app-context";
 import { setState, useStore } from "@/racing-game-r3f/store";
 import { waitForTransactionReceipt } from "@wagmi/core";
@@ -41,6 +42,15 @@ export default function LeaderboardPage() {
   useEffect(() => {
     const getChunckedLeaderboardData = async () => {
       // TODO add chunking
+
+      // TODO: get chains dinamically from sourceChain
+      const results = getLeaderboardContract(Chains.Anvil).getLeaderboardResult(
+        0,
+        leaderboardLength,
+      );
+      // @ts-ignore
+      results.sort((a, b) => a.time - b.time);
+      setLeaderboardData(results);
     };
 
     getChunckedLeaderboardData();
@@ -60,12 +70,13 @@ export default function LeaderboardPage() {
       chainId: sourceChain?.definition?.id,
     });
 
-    // TODO: handle sorting on init and in-memory updates
     const newLeaderboardItem = {
       player: userAddress,
       time: finished,
       date: Math.floor(Date.now() / 1000),
     } as LeaderboardData;
+    const newLeaderboardData = [...leaderboardData, newLeaderboardItem];
+    newLeaderboardData.sort((a, b) => a.time - b.time);
     setLeaderboardData([...leaderboardData, newLeaderboardItem]);
   };
 

@@ -3,7 +3,7 @@ import { anvil } from "viem/chains";
 import { Constants } from "./constants";
 import { leaderboardAbi } from "./abis";
 
-enum Chains {
+export enum Chains {
   Anvil = "ANVIL",
   TaikoTestnet = "TAIKO_TESTNET",
 }
