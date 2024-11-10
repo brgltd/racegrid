@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import {console} from "forge-std/console.sol";
-
 contract Leaderboard {
     struct Result {
         address player;
@@ -15,7 +13,6 @@ contract Leaderboard {
     // TODO: for hackathon or testnets it's okay to leave this open. For mainnet needs to be `onlyOwner`.
     function updateLeaderboard(address player, uint256 time) external {
         results.push(Result({player: player, time: time, date: block.timestamp}));
-        // console.log("length", results.length);
     }
 
     /// @notice Retrieve leaderboard results.

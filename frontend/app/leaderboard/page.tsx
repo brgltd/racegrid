@@ -35,8 +35,7 @@ export default function LeaderboardPage() {
   });
 
   useEffect(() => {
-    console.log({ finished });
-    setState({ finished: 0 });
+    setState({ finished });
   }, []);
 
   useEffect(() => {
@@ -46,11 +45,11 @@ export default function LeaderboardPage() {
       // TODO: get chains dinamically from sourceChain
       const results = await getLeaderboardContract(
         Chains.Anvil,
-      ).getResultsPaginated(0, BigNumber.from("0"));
+      ).getResultsPaginated(0, BigNumber.from(leaderboardLength));
       console.log(JSON.stringify({ results }, null, 4));
       // @ts-ignore
-      results.sort((a, b) => a.time - b.time);
-      setLeaderboardData(results);
+      // results.sort((a, b) => a.time - b.time);
+      // setLeaderboardData(results);
     };
 
     console.log({ leaderboardLength });

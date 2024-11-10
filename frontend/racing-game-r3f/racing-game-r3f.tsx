@@ -175,7 +175,7 @@ export function RacingGameR3F(): JSX.Element {
         <ToggledMap />
         <ToggledOrbitControls />
       </Canvas>
-      <Clock />
+      {/* <Clock /> */}
       <ToggledEditor />
       <Help />
       <Speed />
