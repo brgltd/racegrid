@@ -15,7 +15,7 @@ import { format } from "date-fns";
 interface LeaderboardData {
   player: string;
   time: number;
-  date: string;
+  date: string | number; // TODO: fix this
   timestamp: number;
 }
 
@@ -28,8 +28,19 @@ interface Hex {
 
 type LeaderboardResponse = [string, Hex, Hex];
 
-// function formatTime(miliseconds: number) {
-// }
+function formatRaceDurationToSeconds(miliseconds: number) {
+  return `${Math.floor(miliseconds / 1000)} seconds`;
+}
+
+function formatRaceDurationToLongText(miliseconds: number) {
+  const seconds = Math.floor(miliseconds / 1000);
+  const fullMinutes = seconds / 60;
+  const flooredMinutes = Math.floor(fullMinutes);
+  const decimalsMinutes = fullMinutes - flooredMinutes;
+  const fullSeconds = decimalsMinutes * 60;
+  const flooredSeconds = Math.floor(fullSeconds);
+  return `${flooredMinutes} minutes ${flooredSeconds} seconds`;
+}
 
 function formatLeaderboardData(
   leaderboardData: IntermediaryLeaderboardData,
@@ -40,6 +51,8 @@ function formatLeaderboardData(
     ...leaderboardData,
     player: readableAddress,
     date: format(leaderboardData.timestamp * 1000, "dd MMM yyyy"),
+    // @ts-ignore
+    time: formatRaceDurationToSeconds(leaderboardData.time),
   };
 }
 
@@ -137,7 +150,9 @@ export default function LeaderboardPage() {
       {!!finished && (
         <>
           <div>Congratulations!</div>
-          <div>You've finished the race in {finished}</div>
+          <div>
+            You've finished the race in {formatRaceDurationToLongText(finished)}
+          </div>
           <button onClick={onClickUpdateLeaderboard}>UPDATE LEADERBOARD</button>
         </>
       )}
@@ -148,7 +163,7 @@ export default function LeaderboardPage() {
           <tr>
             <th>Player</th>
             <th>Medal</th>
-            <th>Time</th>
+            <th>Duration</th>
             <th>Date</th>
           </tr>
         </thead>
