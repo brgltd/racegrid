@@ -168,8 +168,7 @@ export interface IState extends BaseState {
   ];
   keyInput: string | null;
 
-  startTime: number;
-  endTime: number;
+  isGameAllowed: boolean;
 }
 
 const setExclusiveBoolean = (set: Setter, boolean: ExclusiveBoolean) => () =>
@@ -271,8 +270,7 @@ const useStoreImpl = create<IState>(
         createRef<Group>(),
       ],
 
-      startTime: 0,
-      endTime: 0,
+      isGameAllowed: false,
     };
   },
 );
