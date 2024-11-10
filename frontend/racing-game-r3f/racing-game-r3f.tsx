@@ -143,11 +143,11 @@ export function RacingGameR3F(): JSX.Element {
 
             <Carpet />
 
-            <Heightmap
+            {/* <Heightmap
               elementSize={0.5085}
               position={[327 - 66.5, -3.3, -473 + 213]}
               rotation={[-Math.PI / 2, 0, -Math.PI]}
-            />
+            /> */}
 
             <Plane />
 

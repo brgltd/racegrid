@@ -20,8 +20,10 @@ contract Leaderboard {
     function getResultsPaginated(uint256 startIndex, uint256 endIndex) external view returns (Result[] memory) {
         Result[] memory resultsCopy = results;
         Result[] memory paginatedResults = new Result[](endIndex - startIndex);
+        uint256 paginatedResultsIndex;
         for (uint256 i = startIndex; i < endIndex; ++i) {
-            paginatedResults[i] = resultsCopy[i];
+            paginatedResults[paginatedResultsIndex] = resultsCopy[i];
+            ++paginatedResultsIndex;
         }
         return paginatedResults;
     }

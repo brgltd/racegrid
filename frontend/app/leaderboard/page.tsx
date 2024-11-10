@@ -33,6 +33,8 @@ interface Hex {
 
 type LeaderboardResponse = [string, Hex, Hex];
 
+const CHUNCK_STEP = 2;
+
 function formatRaceDurationToSeconds(miliseconds: number) {
   return `${Math.floor(miliseconds / 1000)} seconds`;
 }
@@ -103,16 +105,20 @@ export default function LeaderboardPage() {
 
   useEffect(() => {
     const getChunckedLeaderboardData = async () => {
-      // TODO add chunking
-
-      // TODO: get chains dinamically from sourceChain
-      const leaderboardResponse = await getLeaderboardContract(
-        Chains.Anvil,
-      ).getResultsPaginated(0, BigNumber.from(leaderboardLength));
-      const parsedLeaderboardResponse =
-        parseLeaderboardResponse(leaderboardResponse);
+      const leaderboardLengthNumber = Number(leaderboardLength);
+      const aggregatedLeaderboardData: FormattedLeaderboard[] = [];
+      for (let i = 0; i < leaderboardLengthNumber; i += CHUNCK_STEP) {
+        const endIndex = Math.min(i + CHUNCK_STEP, leaderboardLengthNumber);
+        const leaderboardResponse = await getLeaderboardContract(
+          // TODO: get chains dinamically from sourceChain
+          Chains.Anvil,
+        ).getResultsPaginated(i, endIndex);
+        const parsedLeaderboardResponse =
+          parseLeaderboardResponse(leaderboardResponse);
+        aggregatedLeaderboardData.push(...parsedLeaderboardResponse);
+      }
       const sortedLeaderboardData = sortLeaderboardData(
-        parsedLeaderboardResponse,
+        aggregatedLeaderboardData,
       );
       setFormattedLeaderboard(sortedLeaderboardData);
     };
@@ -160,31 +166,39 @@ export default function LeaderboardPage() {
           <div>
             You've finished the race in {formatRaceDurationToLongText(finished)}
           </div>
-          <button onClick={onClickUpdateLeaderboard}>UPDATE LEADERBOARD</button>
+          <button onClick={onClickUpdateLeaderboard}>
+            ADD MY RACE TO THE LEADERBOARD
+          </button>
         </>
       )}
 
-      <h1>Leaderboard</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Player</th>
-            <th>Medal</th>
-            <th>Duration</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {formattedLeaderboard.map((item) => (
-            <tr key={`${item.player}-${item.timestamp}`}>
-              <td>{item.player}</td>
-              <td>gold</td>
-              <td>{item.time}</td>
-              <td>{item.date}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {!formattedLeaderboard.length ? (
+        <div>No results present on the leaderboard yet!</div>
+      ) : (
+        <div>
+          <h1>Leaderboard</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>Player</th>
+                <th>Medal</th>
+                <th>Duration</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {formattedLeaderboard.map((item) => (
+                <tr key={`${item.player}-${item.timestamp}`}>
+                  <td>{item.player}</td>
+                  <td>gold</td>
+                  <td>{item.time}</td>
+                  <td>{item.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
