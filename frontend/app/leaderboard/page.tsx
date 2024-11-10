@@ -12,14 +12,19 @@ import { useReadContract, useWriteContract } from "wagmi";
 import { BigNumber } from "ethers";
 import { format } from "date-fns";
 
-interface LeaderboardData {
+interface BaseLeaderboard {
   player: string;
-  time: number;
-  date: string | number; // TODO: fix this
   timestamp: number;
 }
 
-type IntermediaryLeaderboardData = Omit<LeaderboardData, "date">;
+interface IntermediaryLeaderboard extends BaseLeaderboard {
+  time: number;
+}
+
+interface FormattedLeaderboard extends BaseLeaderboard {
+  time: string;
+  date: string;
+}
 
 interface Hex {
   type: "BigNumber";
@@ -43,25 +48,24 @@ function formatRaceDurationToLongText(miliseconds: number) {
 }
 
 function formatLeaderboardData(
-  leaderboardData: IntermediaryLeaderboardData,
-): LeaderboardData {
+  leaderboardData: IntermediaryLeaderboard,
+): FormattedLeaderboard {
   const fullAddress = leaderboardData.player;
   const readableAddress = `${fullAddress.slice(0, 4)}...${fullAddress.slice(-4)}`;
   return {
     ...leaderboardData,
     player: readableAddress,
     date: format(leaderboardData.timestamp * 1000, "dd MMM yyyy"),
-    // @ts-ignore
     time: formatRaceDurationToSeconds(leaderboardData.time),
   };
 }
 
 function parseLeaderboardResponse(
   leaderboardResponse: LeaderboardResponse[],
-): LeaderboardData[] {
+): FormattedLeaderboard[] {
   return leaderboardResponse.map((item) => {
     const timestamp = BigNumber.from(item[2]).toNumber();
-    const leaderboardData: IntermediaryLeaderboardData = {
+    const leaderboardData: IntermediaryLeaderboard = {
       player: item[0],
       time: BigNumber.from(item[1]).toNumber(),
       timestamp,
@@ -70,13 +74,16 @@ function parseLeaderboardResponse(
   });
 }
 
-function sortLeaderboardData(leaderboardData: LeaderboardData[]) {
+function sortLeaderboardData(leaderboardData: FormattedLeaderboard[]) {
   return [...leaderboardData].sort((a, b) => a.timestamp - b.timestamp);
 }
 
 export default function LeaderboardPage() {
   const [finished] = useStore((s) => [s.finished]);
-  const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>([]);
+
+  const [formattedLeaderboard, setFormattedLeaderboard] = useState<
+    FormattedLeaderboard[]
+  >([]);
 
   const { sourceChain, userAddress } = useAppContext();
 
@@ -107,7 +114,7 @@ export default function LeaderboardPage() {
       const sortedLeaderboardData = sortLeaderboardData(
         parsedLeaderboardResponse,
       );
-      setLeaderboardData(sortedLeaderboardData);
+      setFormattedLeaderboard(sortedLeaderboardData);
     };
 
     if (leaderboardLength) {
@@ -130,7 +137,7 @@ export default function LeaderboardPage() {
     });
 
     const timestampSeconds = Math.floor(Date.now() / 1000);
-    const newLeaderboardItem: IntermediaryLeaderboardData = {
+    const newLeaderboardItem: IntermediaryLeaderboard = {
       player: userAddress as string,
       time: finished,
       timestamp: timestampSeconds,
@@ -138,11 +145,11 @@ export default function LeaderboardPage() {
     const formattedNewLeaderboardItem =
       formatLeaderboardData(newLeaderboardItem);
     const newLeaderboardData = [
-      ...leaderboardData,
+      ...formattedLeaderboard,
       formattedNewLeaderboardItem,
     ];
     const sortedLeaderboardData = sortLeaderboardData(newLeaderboardData);
-    setLeaderboardData(sortedLeaderboardData);
+    setFormattedLeaderboard(sortedLeaderboardData);
   };
 
   return (
@@ -168,7 +175,7 @@ export default function LeaderboardPage() {
           </tr>
         </thead>
         <tbody>
-          {leaderboardData.map((item) => (
+          {formattedLeaderboard.map((item) => (
             <tr key={`${item.player}-${item.timestamp}`}>
               <td>{item.player}</td>
               <td>gold</td>
