@@ -10,7 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 // import { ThemeProvider, createTheme } from "@mui/material/styles";
 // import CssBaseline from "@mui/material/CssBaseline";
-import { wagmiConfig } from "@/chains";
+import { wagmiConfig } from "@/wagmi";
 // import { Toast } from "@/components/toast";
 // import { Footer } from "@/components/footer";
 import "@rainbow-me/rainbowkit/styles.css";

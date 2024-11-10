@@ -1,7 +1,7 @@
 "use client";
 
 import { leaderboardAbi } from "@/abis";
-import { config } from "@/chains";
+import { config } from "@/wagmi";
 import { getLeaderboardContract } from "@/ethers";
 import { useAppContext } from "@/hooks/use-app-context";
 import { setState, useStore } from "@/racing-game-r3f/store";

@@ -1,7 +1,7 @@
 "use client";
 
 import { raceGridNftAbi } from "@/abis";
-import { config } from "@/chains";
+import { config } from "@/wagmi";
 import { useAppContext } from "@/hooks/use-app-context";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { useState } from "react";
