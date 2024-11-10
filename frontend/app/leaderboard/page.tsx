@@ -1,15 +1,14 @@
 "use client";
 
-import { leaderboardAbi, raceGridNftAbi } from "@/abis";
+import { leaderboardAbi } from "@/abis";
 import { config } from "@/chains";
 import { Chains, getLeaderboardContract } from "@/ethers";
 import { useAppContext } from "@/hooks/use-app-context";
 import { setState, useStore } from "@/racing-game-r3f/store";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { useEffect, useState } from "react";
-import { InstancedMesh } from "three";
 import { Address } from "viem";
-import { useReadContract, useReadContracts, useWriteContract } from "wagmi";
+import { useReadContract, useWriteContract } from "wagmi";
 import { BigNumber } from "ethers";
 
 interface LeaderboardData {
@@ -26,17 +25,27 @@ interface Hex {
 
 type LeaderboardResponse = [string, Hex, Hex];
 
+function formatLeaderboardData(leaderboardData: LeaderboardData) {
+  const fullAddress = leaderboardData.player;
+  const readableAddress = `${fullAddress.slice(0, 4)}...${fullAddress.slice(-4)}`;
+  return {
+    ...leaderboardData,
+    player: readableAddress,
+  };
+}
+
 function parseLeaderboardResponse(
   leaderboardResponse: LeaderboardResponse[],
 ): LeaderboardData[] {
   return leaderboardResponse.map((item) => {
     const timestamp = BigNumber.from(item[2]).toNumber();
-    return {
+    const leaderboardData = {
       player: item[0],
       time: BigNumber.from(item[1]).toNumber(),
       date: timestamp,
       timestamp,
     };
+    return formatLeaderboardData(leaderboardData);
   });
 }
 
