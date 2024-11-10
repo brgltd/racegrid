@@ -10,15 +10,16 @@ import { useEffect, useState } from "react";
 import { Address } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
 import { BigNumber } from "ethers";
+import { format } from "date-fns";
 
 interface LeaderboardData {
   player: string;
   time: number;
-  date: number;
+  date: string;
   timestamp: number;
 }
 
-// type IntermediaryLeaderboardData = Omit<LeaderboardData, "date">
+type IntermediaryLeaderboardData = Omit<LeaderboardData, "date">;
 
 interface Hex {
   type: "BigNumber";
@@ -27,12 +28,18 @@ interface Hex {
 
 type LeaderboardResponse = [string, Hex, Hex];
 
-function formatLeaderboardData(leaderboardData: LeaderboardData) {
+// function formatTime(miliseconds: number) {
+// }
+
+function formatLeaderboardData(
+  leaderboardData: IntermediaryLeaderboardData,
+): LeaderboardData {
   const fullAddress = leaderboardData.player;
   const readableAddress = `${fullAddress.slice(0, 4)}...${fullAddress.slice(-4)}`;
   return {
     ...leaderboardData,
     player: readableAddress,
+    date: format(leaderboardData.timestamp * 1000, "dd MMM yyyy"),
   };
 }
 
@@ -41,10 +48,9 @@ function parseLeaderboardResponse(
 ): LeaderboardData[] {
   return leaderboardResponse.map((item) => {
     const timestamp = BigNumber.from(item[2]).toNumber();
-    const leaderboardData = {
+    const leaderboardData: IntermediaryLeaderboardData = {
       player: item[0],
       time: BigNumber.from(item[1]).toNumber(),
-      date: timestamp,
       timestamp,
     };
     return formatLeaderboardData(leaderboardData);
@@ -52,7 +58,7 @@ function parseLeaderboardResponse(
 }
 
 function sortLeaderboardData(leaderboardData: LeaderboardData[]) {
-  leaderboardData.sort((a, b) => a.timestamp - b.timestamp);
+  return [...leaderboardData].sort((a, b) => a.timestamp - b.timestamp);
 }
 
 export default function LeaderboardPage() {
@@ -85,12 +91,13 @@ export default function LeaderboardPage() {
       ).getResultsPaginated(0, BigNumber.from(leaderboardLength));
       const parsedLeaderboardResponse =
         parseLeaderboardResponse(leaderboardResponse);
-      sortLeaderboardData(parsedLeaderboardResponse);
-      setLeaderboardData(parsedLeaderboardResponse);
+      const sortedLeaderboardData = sortLeaderboardData(
+        parsedLeaderboardResponse,
+      );
+      setLeaderboardData(sortedLeaderboardData);
     };
 
-    console.log({ leaderboardLength });
-    if (leaderboardLength !== undefined) {
+    if (leaderboardLength) {
       getChunckedLeaderboardData();
     }
   }, [leaderboardLength]);
@@ -110,20 +117,19 @@ export default function LeaderboardPage() {
     });
 
     const timestampSeconds = Math.floor(Date.now() / 1000);
-    const newLeaderboardItem = {
-      player: userAddress,
+    const newLeaderboardItem: IntermediaryLeaderboardData = {
+      player: userAddress as string,
       time: finished,
-      date: timestampSeconds,
       timestamp: timestampSeconds,
-    } as LeaderboardData;
+    };
     const formattedNewLeaderboardItem =
       formatLeaderboardData(newLeaderboardItem);
     const newLeaderboardData = [
       ...leaderboardData,
       formattedNewLeaderboardItem,
     ];
-    sortLeaderboardData(newLeaderboardData);
-    setLeaderboardData([...leaderboardData, newLeaderboardItem]);
+    const sortedLeaderboardData = sortLeaderboardData(newLeaderboardData);
+    setLeaderboardData(sortedLeaderboardData);
   };
 
   return (
@@ -148,7 +154,7 @@ export default function LeaderboardPage() {
         </thead>
         <tbody>
           {leaderboardData.map((item) => (
-            <tr key={`${item.player}-${item.date}`}>
+            <tr key={`${item.player}-${item.timestamp}`}>
               <td>{item.player}</td>
               <td>gold</td>
               <td>{item.time}</td>
