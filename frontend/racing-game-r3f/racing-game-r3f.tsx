@@ -91,7 +91,7 @@ export function RacingGameR3F(): JSX.Element {
 
   const onFinishRace = () => {
     onFinish();
-    router.push("/result");
+    router.push("/leaderboard");
   };
 
   return (

@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { InstancedMesh } from "three";
 import { Address } from "viem";
 import { useReadContract, useReadContracts, useWriteContract } from "wagmi";
+import { BigNumber } from "ethers";
 
 interface LeaderboardData {
   player: string;
@@ -34,26 +35,28 @@ export default function LeaderboardPage() {
   });
 
   useEffect(() => {
-    console.log(finished);
+    console.log({ finished });
     setState({ finished: 0 });
   }, []);
 
-  // TODO: verify this runs only once
   useEffect(() => {
     const getChunckedLeaderboardData = async () => {
       // TODO add chunking
 
       // TODO: get chains dinamically from sourceChain
-      const results = getLeaderboardContract(Chains.Anvil).getLeaderboardResult(
-        0,
-        leaderboardLength,
-      );
+      const results = await getLeaderboardContract(
+        Chains.Anvil,
+      ).getResultsPaginated(0, BigNumber.from("0"));
+      console.log(JSON.stringify({ results }, null, 4));
       // @ts-ignore
       results.sort((a, b) => a.time - b.time);
       setLeaderboardData(results);
     };
 
-    getChunckedLeaderboardData();
+    console.log({ leaderboardLength });
+    if (leaderboardLength !== undefined) {
+      getChunckedLeaderboardData();
+    }
   }, [leaderboardLength]);
 
   const onClickUpdateLeaderboard = async () => {

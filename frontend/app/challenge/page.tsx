@@ -1,4 +1,4 @@
-import { RacingGame } from "@/components/racing-game-r3f";
+import { RacingGame } from "@/components/racing-game";
 
 export default function Challenge() {
   return <RacingGame />;
