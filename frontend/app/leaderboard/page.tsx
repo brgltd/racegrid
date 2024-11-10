@@ -21,6 +21,7 @@ interface BaseLeaderboard {
 interface FormattedLeaderboard extends BaseLeaderboard {
   formattedDuration: string;
   date: string;
+  key: number;
 }
 
 interface Hex {
@@ -31,6 +32,8 @@ interface Hex {
 type LeaderboardResponse = [string, Hex, Hex];
 
 const CHUNCK_STEP = 2;
+
+let counter = 0;
 
 function formatRaceDurationToSeconds(miliseconds: number) {
   return `${Math.floor(miliseconds / 1000)} seconds`;
@@ -51,11 +54,13 @@ function formatLeaderboardData(
 ): FormattedLeaderboard {
   const fullAddress = leaderboardData.player;
   const readableAddress = `${fullAddress.slice(0, 4)}...${fullAddress.slice(-4)}`;
+  ++counter;
   return {
     ...leaderboardData,
     player: readableAddress,
     date: format(leaderboardData.timestamp * 1000, "dd MMM yyyy"),
     formattedDuration: formatRaceDurationToSeconds(leaderboardData.duration),
+    key: counter,
   };
 }
 
@@ -186,7 +191,7 @@ export default function LeaderboardPage() {
             </thead>
             <tbody>
               {formattedLeaderboard.map((item) => (
-                <tr key={`${item.player}-${item.timestamp}`}>
+                <tr key={item.key}>
                   <td>{item.player}</td>
                   <td>gold</td>
                   <td>{item.formattedDuration}</td>
