@@ -2,7 +2,7 @@
 
 import { leaderboardAbi } from "@/abis";
 import { config } from "@/chains";
-import { Chains, getLeaderboardContract } from "@/ethers";
+import { getLeaderboardContract } from "@/ethers";
 import { useAppContext } from "@/hooks/use-app-context";
 import { setState, useStore } from "@/racing-game-r3f/store";
 import { waitForTransactionReceipt } from "@wagmi/core";
@@ -54,7 +54,6 @@ function formatLeaderboardData(
 ): FormattedLeaderboard {
   const fullAddress = leaderboardData.player;
   const readableAddress = `${fullAddress.slice(0, 4)}...${fullAddress.slice(-4)}`;
-  counter;
   const formattedLeaderboard = {
     ...leaderboardData,
     player: readableAddress,
@@ -81,7 +80,6 @@ function parseLeaderboardResponse(
 }
 
 function sortLeaderboardData(leaderboardData: FormattedLeaderboard[]) {
-  console.log(leaderboardData);
   return [...leaderboardData].sort((a, b) => a.duration - b.duration);
 }
 
@@ -115,8 +113,7 @@ export default function LeaderboardPage() {
       for (let i = 0; i < leaderboardLengthNumber; i += CHUNCK_STEP) {
         const endIndex = Math.min(i + CHUNCK_STEP, leaderboardLengthNumber);
         const leaderboardResponse = await getLeaderboardContract(
-          // TODO: get chains dinamically from sourceChain
-          Chains.Anvil,
+          sourceChain?.name,
         ).getResultsPaginated(i, endIndex);
         const parsedLeaderboardResponse =
           parseLeaderboardResponse(leaderboardResponse);
@@ -185,6 +182,7 @@ export default function LeaderboardPage() {
           <table>
             <thead>
               <tr>
+                <th>Rank</th>
                 <th>Player</th>
                 <th>Medal</th>
                 <th>Duration</th>
@@ -192,8 +190,9 @@ export default function LeaderboardPage() {
               </tr>
             </thead>
             <tbody>
-              {formattedLeaderboard.map((item) => (
+              {formattedLeaderboard.map((item, index) => (
                 <tr key={item.key}>
+                  <td>{index + 1}</td>
                   <td>{item.player}</td>
                   <td>gold</td>
                   <td>{item.formattedDuration}</td>

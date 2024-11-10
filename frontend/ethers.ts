@@ -2,26 +2,20 @@ import { ethers } from "ethers";
 import { anvil } from "viem/chains";
 import { Constants } from "./constants";
 import { leaderboardAbi } from "./abis";
-
-export enum Chains {
-  Anvil = "ANVIL",
-  TaikoTestnet = "TAIKO_TESTNET",
-}
+import { anvilChain } from "./chains";
 
 export const anvilProviderReadable = new ethers.providers.JsonRpcProvider(
   anvil.rpcUrls.default.http[0],
 );
 
-export function getLeaderboardContract(chain: Chains) {
-  if (chain === Chains.Anvil) {
+export function getLeaderboardContract(chain: string) {
+  if (chain === anvilChain.name) {
     return new ethers.Contract(
       Constants.Anvil.Leaderboard,
       leaderboardAbi,
       anvilProviderReadable,
     );
   }
-  if (chain === Chains.TaikoTestnet) {
-    // TODO
-  }
+  // TODO: add taiko testnet
   throw new Error("undefined chain");
 }

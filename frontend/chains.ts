@@ -28,7 +28,7 @@ type SupportedChainsMap = Record<number, Chain>;
 //   definition: bscTestnet,
 // };
 
-const anvilChain = {
+export const anvilChain = {
   chainSelector: 31337,
   name: "Anvil",
   img: 9195,
