@@ -54,14 +54,16 @@ function formatLeaderboardData(
 ): FormattedLeaderboard {
   const fullAddress = leaderboardData.player;
   const readableAddress = `${fullAddress.slice(0, 4)}...${fullAddress.slice(-4)}`;
-  ++counter;
-  return {
+  counter;
+  const formattedLeaderboard = {
     ...leaderboardData,
     player: readableAddress,
     date: format(leaderboardData.timestamp * 1000, "dd MMM yyyy"),
     formattedDuration: formatRaceDurationToSeconds(leaderboardData.duration),
     key: counter,
   };
+  ++counter;
+  return formattedLeaderboard;
 }
 
 function parseLeaderboardResponse(
