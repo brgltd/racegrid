@@ -16,6 +16,32 @@ interface LeaderboardData {
   player: string;
   time: number;
   date: number;
+  timestamp: number;
+}
+
+interface Hex {
+  type: "BigNumber";
+  hex: string;
+}
+
+type LeaderboardResponse = [string, Hex, Hex];
+
+function parseLeaderboardResponse(
+  leaderboardResponse: LeaderboardResponse[],
+): LeaderboardData[] {
+  return leaderboardResponse.map((item) => {
+    const timestamp = BigNumber.from(item[2]).toNumber();
+    return {
+      player: item[0],
+      time: BigNumber.from(item[1]).toNumber(),
+      date: timestamp,
+      timestamp,
+    };
+  });
+}
+
+function sortLeaderboardData(leaderboardData: LeaderboardData[]) {
+  leaderboardData.sort((a, b) => a.time - b.time);
 }
 
 export default function LeaderboardPage() {
@@ -43,13 +69,13 @@ export default function LeaderboardPage() {
       // TODO add chunking
 
       // TODO: get chains dinamically from sourceChain
-      const results = await getLeaderboardContract(
+      const leaderboardResponse = await getLeaderboardContract(
         Chains.Anvil,
       ).getResultsPaginated(0, BigNumber.from(leaderboardLength));
-      console.log(JSON.stringify({ results }, null, 4));
-      // @ts-ignore
-      // results.sort((a, b) => a.time - b.time);
-      // setLeaderboardData(results);
+      const parsedLeaderboardResponse =
+        parseLeaderboardResponse(leaderboardResponse);
+      sortLeaderboardData(parsedLeaderboardResponse);
+      setLeaderboardData(parsedLeaderboardResponse);
     };
 
     console.log({ leaderboardLength });
@@ -78,15 +104,19 @@ export default function LeaderboardPage() {
       date: Math.floor(Date.now() / 1000),
     } as LeaderboardData;
     const newLeaderboardData = [...leaderboardData, newLeaderboardItem];
-    newLeaderboardData.sort((a, b) => a.time - b.time);
+    sortLeaderboardData(newLeaderboardData);
     setLeaderboardData([...leaderboardData, newLeaderboardItem]);
   };
 
   return (
     <div>
-      <div>Congratulations!</div>
-      <div>You've finished the race in xyz</div>
-      <button onClick={onClickUpdateLeaderboard}>UPDATE LEADERBOARD</button>
+      {!!finished && (
+        <>
+          <div>Congratulations!</div>
+          <div>You've finished the race in {finished}</div>
+          <button onClick={onClickUpdateLeaderboard}>UPDATE LEADERBOARD</button>
+        </>
+      )}
 
       <h1>Leaderboard</h1>
       <table>

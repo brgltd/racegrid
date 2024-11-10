@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Layers } from "three";
 import { Canvas } from "@react-three/fiber";
 import { Physics, Debug, usePlane, useBox, Triplet } from "@react-three/cannon";
@@ -175,7 +175,7 @@ export function RacingGameR3F(): JSX.Element {
         <ToggledMap />
         <ToggledOrbitControls />
       </Canvas>
-      {/* <Clock /> */}
+      <Clock />
       <ToggledEditor />
       <Help />
       <Speed />
