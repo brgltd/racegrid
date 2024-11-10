@@ -15,14 +15,11 @@ import { format } from "date-fns";
 interface BaseLeaderboard {
   player: string;
   timestamp: number;
-}
-
-interface IntermediaryLeaderboard extends BaseLeaderboard {
-  time: number;
+  duration: number;
 }
 
 interface FormattedLeaderboard extends BaseLeaderboard {
-  time: string;
+  formattedDuration: string;
   date: string;
 }
 
@@ -50,7 +47,7 @@ function formatRaceDurationToLongText(miliseconds: number) {
 }
 
 function formatLeaderboardData(
-  leaderboardData: IntermediaryLeaderboard,
+  leaderboardData: BaseLeaderboard,
 ): FormattedLeaderboard {
   const fullAddress = leaderboardData.player;
   const readableAddress = `${fullAddress.slice(0, 4)}...${fullAddress.slice(-4)}`;
@@ -58,7 +55,7 @@ function formatLeaderboardData(
     ...leaderboardData,
     player: readableAddress,
     date: format(leaderboardData.timestamp * 1000, "dd MMM yyyy"),
-    time: formatRaceDurationToSeconds(leaderboardData.time),
+    formattedDuration: formatRaceDurationToSeconds(leaderboardData.duration),
   };
 }
 
@@ -67,9 +64,9 @@ function parseLeaderboardResponse(
 ): FormattedLeaderboard[] {
   return leaderboardResponse.map((item) => {
     const timestamp = BigNumber.from(item[2]).toNumber();
-    const leaderboardData: IntermediaryLeaderboard = {
+    const leaderboardData: BaseLeaderboard = {
       player: item[0],
-      time: BigNumber.from(item[1]).toNumber(),
+      duration: BigNumber.from(item[1]).toNumber(),
       timestamp,
     };
     return formatLeaderboardData(leaderboardData);
@@ -77,7 +74,8 @@ function parseLeaderboardResponse(
 }
 
 function sortLeaderboardData(leaderboardData: FormattedLeaderboard[]) {
-  return [...leaderboardData].sort((a, b) => a.timestamp - b.timestamp);
+  console.log(leaderboardData);
+  return [...leaderboardData].sort((a, b) => a.duration - b.duration);
 }
 
 export default function LeaderboardPage() {
@@ -143,9 +141,9 @@ export default function LeaderboardPage() {
     });
 
     const timestampSeconds = Math.floor(Date.now() / 1000);
-    const newLeaderboardItem: IntermediaryLeaderboard = {
+    const newLeaderboardItem: BaseLeaderboard = {
       player: userAddress as string,
-      time: finished,
+      duration: finished,
       timestamp: timestampSeconds,
     };
     const formattedNewLeaderboardItem =
@@ -191,7 +189,7 @@ export default function LeaderboardPage() {
                 <tr key={`${item.player}-${item.timestamp}`}>
                   <td>{item.player}</td>
                   <td>gold</td>
-                  <td>{item.time}</td>
+                  <td>{item.formattedDuration}</td>
                   <td>{item.date}</td>
                 </tr>
               ))}
