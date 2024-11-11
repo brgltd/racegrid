@@ -17,22 +17,25 @@ import "@rainbow-me/rainbowkit/styles.css";
 import "../app/globals.css";
 import { Navbar } from "./navbar";
 import { AppProvider } from "@/hooks/use-app-context";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const inter = Inter({ subsets: ["latin"] });
 
 const queryClient = new QueryClient();
 
-// export const darkTheme = createTheme({
-//   palette: {
-//     mode: "dark",
-//   },
-// });
+export const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
-// export const lightTheme = createTheme({
-//   palette: {
-//     mode: "light",
-//   },
-// });
+export const lightTheme = createTheme({
+  palette: {
+    mode: "light",
+  },
+});
 
 // export function AppLayout({
 //   children,
@@ -81,16 +84,21 @@ export function AppLayout({
         <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
             <RainbowKitProvider theme={rainbowDarkTheme()}>
-              <AppProvider>
-                {/* <div className="flex flex-row justify-center">
-                  <div className="mx-12" style={{ width: "1200px" }}> */}
-                <div className="">
-                  <div className="">
-                    <Navbar />
-                    <main className="main">{children}</main>
-                  </div>
-                </div>
-              </AppProvider>
+              <AppRouterCacheProvider>
+                <ThemeProvider theme={darkTheme}>
+                  <CssBaseline />
+                  <AppProvider>
+                    {/* <div className="flex flex-row justify-center">
+                        <div className="mx-12" style={{ width: "1200px" }}> */}
+                    <div className="">
+                      <div className="">
+                        <Navbar />
+                        <main className="main">{children}</main>
+                      </div>
+                    </div>
+                  </AppProvider>
+                </ThemeProvider>
+              </AppRouterCacheProvider>
             </RainbowKitProvider>
           </QueryClientProvider>
         </WagmiProvider>
