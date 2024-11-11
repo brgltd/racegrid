@@ -40,10 +40,21 @@ body,
   overflow: hidden;
 }
 
-body {
+/* body {
   background: #101010;
   color: white;
   font-family: "Inter var", sans-serif;
+} */
+
+body {
+  background: linear-gradient(
+    to right,
+    #1b1d33,
+    #141629,
+    #141828,
+    #141629,
+    #1b1d33
+  );
 }
 
 .clock {

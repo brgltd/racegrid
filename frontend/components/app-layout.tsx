@@ -82,8 +82,14 @@ export function AppLayout({
           <QueryClientProvider client={queryClient}>
             <RainbowKitProvider theme={rainbowDarkTheme()}>
               <AppProvider>
-                <Navbar />
-                <main className="main">{children}</main>
+                {/* <div className="flex flex-row justify-center">
+                  <div className="mx-12" style={{ width: "1200px" }}> */}
+                <div className="">
+                  <div className="">
+                    <Navbar />
+                    <main className="main">{children}</main>
+                  </div>
+                </div>
               </AppProvider>
             </RainbowKitProvider>
           </QueryClientProvider>

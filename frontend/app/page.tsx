@@ -1,12 +1,7 @@
 "use client";
 
-import { raceGridNftAbi } from "@/abis";
-import { useAppContext } from "@/hooks/use-app-context";
-import { setState, useStore } from "@/racing-game-r3f/store";
+import { useStore } from "@/racing-game-r3f/store";
 import Link from "next/link";
-import { useEffect } from "react";
-import { useReadContract } from "wagmi";
-import { colors } from "./nft/page";
 import { useGLTF, useTexture } from "@react-three/drei";
 import { useReadNFT } from "@/hooks/use-read-nft";
 
@@ -21,18 +16,24 @@ export default function HomePage() {
   return (
     <div>
       <ul>
-        <li>
+        <li className="text-2xl mb-8">
           {isGameAllowed ? (
-            <Link href="/challenge">Play Challenge</Link>
+            <Link
+              href="/challenge"
+              className="underline hover:text-blue-400 w-fit transition-all"
+            >
+              Play Challenge
+            </Link>
           ) : (
+            // <span>Play Challenge</span>
             <span>Play Challenge</span>
           )}{" "}
           {!isGameAllowed && <span>You must own an NFT to play the game</span>}
         </li>
-        <li>
+        <li className="text-2xl mb-8 underline hover:text-blue-400 w-fit transition-all">
           <Link href="/nft">Purchase NFT</Link>
         </li>
-        <li>Multiplayer (Coming Soon)</li>
+        <li className="text-2xl mb-8">Multiplayer (Coming Soon)</li>
       </ul>
     </div>
   );
