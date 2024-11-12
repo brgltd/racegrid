@@ -17,30 +17,40 @@ export default function HomePage() {
   return (
     <div>
       <ul>
-        <li className="text-2xl mb-8">
-          {isGameAllowed ? (
-            <Link
-              href="/challenge"
-              className="underline hover:text-blue-400 w-fit transition-all"
-            >
-              Play Challenge
-            </Link>
-          ) : (
-            <Tooltip
-              placement="right"
-              title={
-                <h1 style={{ fontSize: 20 }}>
-                  Purchase an NFT to play the Race Challenge
-                </h1>
-              }
-            >
-              <span>Play Challenge</span>
-            </Tooltip>
-          )}
-        </li>
-        <li className="text-2xl mb-8 underline hover:text-blue-400 w-fit transition-all">
-          <Link href="/nft">Purchase NFT</Link>
-        </li>
+        {isGameAllowed ? (
+          <>
+            <li>
+              <Link
+                href="/challenge"
+                className="underline hover:text-blue-400 w-fit transition-all"
+              >
+                Play Challenge
+              </Link>
+            </li>
+
+            <li className="text-2xl mb-10 underline hover:text-blue-400 w-fit transition-all">
+              <Link href="/nft">Purchase NFT</Link>
+            </li>
+          </>
+        ) : (
+          <>
+            <li className="text-2xl mb-10 underline hover:text-blue-400 w-fit transition-all">
+              <Link href="/nft">Purchase NFT</Link>
+            </li>
+            <li>
+              <Tooltip
+                placement="right"
+                title={
+                  <h1 style={{ fontSize: 20 }}>
+                    Purchase an NFT to play the Race Challenge
+                  </h1>
+                }
+              >
+                <div className="text-2xl mb-10 w-fit">Play Challenge</div>
+              </Tooltip>
+            </li>
+          </>
+        )}
         <li className="text-2xl mb-8 w-fit">
           <div>Multiplayer (Coming Soon)</div>
         </li>

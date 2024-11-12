@@ -88,10 +88,8 @@ export function AppLayout({
                 <ThemeProvider theme={darkTheme}>
                   <CssBaseline />
                   <AppProvider>
-                    {/* <div className="flex flex-row justify-center">
-                        <div className="mx-12" style={{ width: "1200px" }}> */}
-                    <div className="">
-                      <div className="">
+                    <div className="flex flex-row justify-center">
+                      <div className="mx-12" style={{ width: "1200px" }}>
                         <Navbar />
                         <main className="main">{children}</main>
                       </div>
