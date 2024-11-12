@@ -26,25 +26,23 @@ export default function HomePage() {
               Play Challenge
             </Link>
           ) : (
-            // <span>Play Challenge</span>
-            <span>Play Challenge</span>
-          )}{" "}
-          {!isGameAllowed && <span>You must own an NFT to play the game</span>}
+            <Tooltip
+              placement="right"
+              title={
+                <h1 style={{ fontSize: 20 }}>
+                  Purchase an NFT to play the Race Challenge
+                </h1>
+              }
+            >
+              <span>Play Challenge</span>
+            </Tooltip>
+          )}
         </li>
         <li className="text-2xl mb-8 underline hover:text-blue-400 w-fit transition-all">
           <Link href="/nft">Purchase NFT</Link>
         </li>
         <li className="text-2xl mb-8 w-fit">
-          <Tooltip
-            placement="right"
-            title={
-              <h1 style={{ fontSize: 20 }}>
-                Racing multiplayer games will be available shortly
-              </h1>
-            }
-          >
-            <div>Multiplayer (Coming Soon)</div>
-          </Tooltip>
+          <div>Multiplayer (Coming Soon)</div>
         </li>
       </ul>
     </div>

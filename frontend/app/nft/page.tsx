@@ -65,7 +65,7 @@ export default function Card() {
 
   return (
     <div>
-      <div>Choose the color for your car</div>
+      <div>Choose a color for your NFT car</div>
       <select
         value={color}
         onChange={(e) => {
@@ -78,7 +78,6 @@ export default function Card() {
           </option>
         ))}
       </select>
-      <div>Cost: 0.01 ETH</div>
       <button onClick={onClickMint}>mint</button>
 
       <hr />

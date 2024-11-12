@@ -14,7 +14,7 @@ export function Navbar() {
             <Link href="/">RACEGRID</Link>
           </li>
           <li className="mr-12 hover-glow">
-            <Link href="/create">LEADERBOARD</Link>
+            <Link href="/leaderboard">LEADERBOARD</Link>
           </li>
         </ul>
         <li className="lg:ml-auto">
