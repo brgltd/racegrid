@@ -7,6 +7,7 @@ import { waitForTransactionReceipt } from "@wagmi/core";
 import { useState } from "react";
 import { Address } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
+import { MenuItem, TextField } from "@mui/material";
 
 export const colors = [
   "red",
@@ -19,6 +20,11 @@ export const colors = [
   "black",
   "gray",
 ];
+
+const colorOptions = colors.map((color) => ({
+  value: color,
+  label: `${color[0].toUpperCase()}${color.slice(1)}`,
+}));
 
 function buildTokenURI(color: string) {
   const prefix =
@@ -65,23 +71,27 @@ export default function Card() {
 
   return (
     <div>
-      <div>Choose a color for your NFT car</div>
-      <select
-        value={color}
-        onChange={(e) => {
-          setColor(e.target.value);
-        }}
-      >
-        {colors.map((colorItem) => (
-          <option key={colorItem} value={colorItem}>
-            {colorItem}
-          </option>
-        ))}
-      </select>
-      <button onClick={onClickMint}>mint</button>
+      <div className="text-2xl mb-10">Choose a color for your NFT Car</div>
+      <div className="mb-10">
+        <TextField
+          id="car-color"
+          select
+          label="Car Color"
+          value={color}
+          onChange={(e) => {
+            setColor(e.target.value);
+          }}
+          sx={{ width: "350px" }}
+        >
+          {colorOptions.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
 
-      <hr />
-      <div>user token: {userToken || "none"}</div>
+      <button onClick={onClickMint}>mint</button>
     </div>
   );
 }

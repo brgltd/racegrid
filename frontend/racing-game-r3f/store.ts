@@ -270,8 +270,8 @@ const useStoreImpl = create<IState>(
         createRef<Group>(),
       ],
 
-      isGameAllowed: false,
-      // isGameAllowed: true,
+      // isGameAllowed: false,
+      isGameAllowed: true,
     };
   },
 );

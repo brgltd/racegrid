@@ -20,6 +20,8 @@ import { AppProvider } from "@/hooks/use-app-context";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { usePathname } from "next/navigation";
+import { cn } from "@/utils/cn";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -78,6 +80,9 @@ export function AppLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isGamePage = pathname === "/challenge";
+
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -88,8 +93,16 @@ export function AppLayout({
                 <ThemeProvider theme={darkTheme}>
                   <CssBaseline />
                   <AppProvider>
-                    <div className="flex flex-row justify-center">
-                      <div className="mx-12" style={{ width: "1200px" }}>
+                    <div
+                      className={cn(
+                        !isGamePage ? "flex flex-row justify-center" : "",
+                      )}
+                    >
+                      {/* <div className="mx-12" style={{ width: "1200px" }}> */}
+                      <div
+                        className={!isGamePage ? "mx-12" : ""}
+                        style={!isGamePage ? { width: "1200px" } : {}}
+                      >
                         <Navbar />
                         <main className="main">{children}</main>
                       </div>

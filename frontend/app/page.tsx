@@ -19,15 +19,9 @@ export default function HomePage() {
       <ul>
         {isGameAllowed ? (
           <>
-            <li>
-              <Link
-                href="/challenge"
-                className="underline hover:text-blue-400 w-fit transition-all"
-              >
-                Play Challenge
-              </Link>
+            <li className="text-2xl mb-10 underline hover:text-blue-400 w-fit transition-all">
+              <Link href="/challenge">Play Challenge</Link>
             </li>
-
             <li className="text-2xl mb-10 underline hover:text-blue-400 w-fit transition-all">
               <Link href="/nft">Purchase NFT</Link>
             </li>
