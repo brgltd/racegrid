@@ -7,7 +7,7 @@ import { waitForTransactionReceipt } from "@wagmi/core";
 import { useState } from "react";
 import { Address } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
-import { MenuItem, TextField } from "@mui/material";
+import { CircularProgress, MenuItem, TextField } from "@mui/material";
 import { Button } from "@/components/button";
 
 export const colors = [
@@ -37,13 +37,15 @@ function buildTokenURI(color: string) {
 }
 
 export default function Card() {
-  const [color, setColor] = useState(() => colorOptions[0].value);
+  const [color, setColor] = useState(colorOptions[0].value);
+  const [isMinting, setIsMinting] = useState(true);
 
   const { writeContractAsync } = useWriteContract();
 
   const { sourceChain, handleError } = useAppContext();
 
   const onClickMint = async () => {
+    setIsMinting(true);
     try {
       const hash = await writeContractAsync({
         address: sourceChain?.raceGridNFT,
@@ -59,6 +61,7 @@ export default function Card() {
     } catch (error) {
       handleError(error);
     }
+    setIsMinting(false);
   };
 
   return (
@@ -83,13 +86,22 @@ export default function Card() {
         </TextField>
       </div>
 
-      <Button
-        onClick={onClickMint}
-        isDisabled={false}
-        styles={{ width: "300px" }}
-      >
-        Mint NFT
-      </Button>
+      <div className="mb-10">
+        <Button
+          onClick={onClickMint}
+          isDisabled={isMinting}
+          styles={{ width: "300px" }}
+        >
+          Mint NFT
+        </Button>
+      </div>
+
+      {isMinting && (
+        <div className="flex flex-row align-center">
+          <CircularProgress size={20} />
+          <div className="ml-4">Minting in progress</div>
+        </div>
+      )}
     </div>
   );
 }
