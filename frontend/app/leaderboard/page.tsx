@@ -11,6 +11,8 @@ import { Address } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
 import { BigNumber } from "ethers";
 import { format } from "date-fns";
+import { Button } from "@/components/button";
+import { CircularProgress } from "@mui/material";
 
 interface BaseLeaderboard {
   player: string;
@@ -22,6 +24,7 @@ interface FormattedLeaderboard extends BaseLeaderboard {
   formattedDuration: string;
   date: string;
   key: number;
+  shortAddress: string;
 }
 
 interface Hex {
@@ -46,18 +49,18 @@ function formatRaceDurationToLongText(miliseconds: number) {
   const decimalsMinutes = fullMinutes - flooredMinutes;
   const fullSeconds = decimalsMinutes * 60;
   const flooredSeconds = Math.floor(fullSeconds);
-  return `${flooredMinutes} minutes ${flooredSeconds} seconds`;
+  return `${flooredMinutes > 0 ? `${flooredMinutes} minute${flooredMinutes > 1 ? "s" : ""} and ` : ""}${flooredSeconds} seconds`;
 }
 
 function formatLeaderboardData(
   leaderboardData: BaseLeaderboard,
 ): FormattedLeaderboard {
   const fullAddress = leaderboardData.player;
-  const readableAddress = `${fullAddress.slice(0, 4)}...${fullAddress.slice(-4)}`;
+  const shortAddress = `${fullAddress.slice(0, 4)}...${fullAddress.slice(-4)}`;
   const formattedLeaderboard = {
     ...leaderboardData,
-    player: readableAddress,
-    date: format(leaderboardData.timestamp * 1000, "dd MMM yyyy"),
+    shortAddress: shortAddress,
+    date: format(leaderboardData.timestamp * 1000, "dd MMMM yyyy"),
     formattedDuration: formatRaceDurationToSeconds(leaderboardData.duration),
     key: counter,
   };
@@ -85,12 +88,14 @@ function sortLeaderboardData(leaderboardData: FormattedLeaderboard[]) {
 
 export default function LeaderboardPage() {
   const [finished] = useStore((s) => [s.finished]);
-
+  const [localFinished, setLocalFinished] = useState(finished);
   const [formattedLeaderboard, setFormattedLeaderboard] = useState<
     FormattedLeaderboard[]
   >([]);
+  const [isUpdatingLeaderboard, setIsUpdatingLeaderboard] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const { sourceChain, userAddress } = useAppContext();
+  const { sourceChain, userAddress, handleError } = useAppContext();
 
   const { writeContractAsync } = useWriteContract();
 
@@ -101,10 +106,6 @@ export default function LeaderboardPage() {
     chainId: sourceChain?.definition?.id,
     query: { enabled: !!sourceChain },
   });
-
-  useEffect(() => {
-    setState({ finished });
-  }, []);
 
   useEffect(() => {
     const getChunckedLeaderboardData = async () => {
@@ -131,48 +132,55 @@ export default function LeaderboardPage() {
   }, [leaderboardLength]);
 
   const onClickUpdateLeaderboard = async () => {
-    // Currently open for hackathon. For any mainnet deployment `updateLeaderboard` should be updated to be `onlyOnwer`.
-    const hash = await writeContractAsync({
-      address: sourceChain?.leaderboard,
-      abi: leaderboardAbi,
-      functionName: "updateLeaderboard",
-      args: [userAddress as Address, BigInt(finished)],
-      chainId: sourceChain?.definition?.id,
-    });
-    await waitForTransactionReceipt(config, {
-      hash,
-      chainId: sourceChain?.definition?.id,
-    });
+    setIsUpdatingLeaderboard(true);
+    try {
+      // Currently open for hackathon. For any mainnet deployment `updateLeaderboard` should be updated to be `onlyOnwer`.
+      const hash = await writeContractAsync({
+        address: sourceChain?.leaderboard,
+        abi: leaderboardAbi,
+        functionName: "updateLeaderboard",
+        args: [userAddress as Address, BigInt(finished)],
+        chainId: sourceChain?.definition?.id,
+      });
+      await waitForTransactionReceipt(config, {
+        hash,
+        chainId: sourceChain?.definition?.id,
+      });
 
-    const timestampSeconds = Math.floor(Date.now() / 1000);
-    const newLeaderboardItem: BaseLeaderboard = {
-      player: userAddress as string,
-      duration: finished,
-      timestamp: timestampSeconds,
-    };
-    const formattedNewLeaderboardItem =
-      formatLeaderboardData(newLeaderboardItem);
-    const newLeaderboardData = [
-      ...formattedLeaderboard,
-      formattedNewLeaderboardItem,
-    ];
-    const sortedLeaderboardData = sortLeaderboardData(newLeaderboardData);
-    setFormattedLeaderboard(sortedLeaderboardData);
+      const timestampSeconds = Math.floor(Date.now() / 1000);
+      const newLeaderboardItem: BaseLeaderboard = {
+        player: userAddress as string,
+        duration: finished,
+        timestamp: timestampSeconds,
+      };
+      const formattedNewLeaderboardItem =
+        formatLeaderboardData(newLeaderboardItem);
+      const newLeaderboardData = [
+        ...formattedLeaderboard,
+        formattedNewLeaderboardItem,
+      ];
+      const sortedLeaderboardData = sortLeaderboardData(newLeaderboardData);
+      setFormattedLeaderboard(sortedLeaderboardData);
+      setIsSuccess(true);
+      setState({ finished: 0 });
+    } catch (error) {
+      setIsSuccess(false);
+      handleError(error);
+    }
+    setIsUpdatingLeaderboard(false);
   };
-
-  console.log(JSON.stringify(formattedLeaderboard, null, 4));
 
   return (
     <div>
-      {!!finished && (
+      {(!!isSuccess || !!finished) && (
         <>
-          <div>Congratulations!</div>
-          <div>
-            You've finished the race in {formatRaceDurationToLongText(finished)}
+          <div className="mb-8 text-lg">
+            <div className="mb-2">Congratulations!</div>
+            <div>
+              You've finished the race in{" "}
+              {formatRaceDurationToLongText(localFinished)}
+            </div>
           </div>
-          <button onClick={onClickUpdateLeaderboard}>
-            ADD MY RACE TO THE LEADERBOARD
-          </button>
         </>
       )}
 
@@ -180,10 +188,39 @@ export default function LeaderboardPage() {
         <div>No results present on the leaderboard yet!</div>
       ) : (
         <div>
-          <h1>Leaderboard</h1>
+          <h1 className="text-2xl font-bold">Leaderboard</h1>
+
+          <div
+            className="my-6 flex flex-row align-center"
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            {!isSuccess && !!finished && (
+              <>
+                <Button
+                  onClick={onClickUpdateLeaderboard}
+                  isDisabled={isUpdatingLeaderboard}
+                >
+                  ADD MY RACE IN THE LEADERBOARD
+                </Button>
+
+                {isUpdatingLeaderboard && (
+                  <div className="ml-4 flex flex-row align-center justify-center">
+                    <CircularProgress size={20} />
+                  </div>
+                )}
+              </>
+            )}
+
+            {isSuccess && !isUpdatingLeaderboard && (
+              <div className="flex flex-row align-center justify-center">
+                Race entry added successfully!
+              </div>
+            )}
+          </div>
+
           <table>
             <thead>
-              <tr>
+              <tr className="*:border-b-2 *:px-12 *:py-6 text-left *:font-bold">
                 <th>Rank</th>
                 <th>Player</th>
                 <th>Duration</th>
@@ -192,9 +229,9 @@ export default function LeaderboardPage() {
             </thead>
             <tbody>
               {formattedLeaderboard.map((item, index) => (
-                <tr key={item.key}>
+                <tr key={item.key} className="*:px-12 *:py-6">
                   <td>{index + 1}</td>
-                  <td>{item.player}</td>
+                  <td title={item.player}>{item.shortAddress}</td>
                   <td>{item.formattedDuration}</td>
                   <td>{item.date}</td>
                 </tr>
