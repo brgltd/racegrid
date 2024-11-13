@@ -125,7 +125,6 @@ export default function LeaderboardPage() {
       );
       setFormattedLeaderboard(sortedLeaderboardData);
     };
-
     if (leaderboardLength) {
       getChunckedLeaderboardData();
     }
@@ -146,7 +145,6 @@ export default function LeaderboardPage() {
         hash,
         chainId: sourceChain?.definition?.id,
       });
-
       const timestampSeconds = Math.floor(Date.now() / 1000);
       const newLeaderboardItem: BaseLeaderboard = {
         player: userAddress as string,
@@ -170,96 +168,87 @@ export default function LeaderboardPage() {
     setIsUpdatingLeaderboard(false);
   };
 
-  if (isPending) {
-    return (
-      <>
-        <h1 className="text-2xl font-bold">Leaderboard</h1>
-        <div className="my-6">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div className="mb-8" key={i}>
-              <Skeleton
-                variant="rectangular"
-                animation="wave"
-                width={350}
-                height={50}
-              />
-            </div>
-          ))}
-        </div>
-      </>
-    );
-  }
-
   return (
     <div>
       {(!!isSuccess || !!finished) && (
-        <>
-          <div className="mb-8 text-lg">
-            <div className="mb-2">Congratulations!</div>
-            <div>
-              You've finished the race in{" "}
-              {formatRaceDurationToLongText(localFinished)}
-            </div>
+        <div className="mb-8 text-lg">
+          <div className="mb-2">Congratulations!</div>
+          <div>
+            You've finished the race in{" "}
+            {formatRaceDurationToLongText(localFinished)}
           </div>
-        </>
-      )}
-
-      {!formattedLeaderboard.length ? (
-        <div>No results present on the leaderboard yet!</div>
-      ) : (
-        <div>
-          <h1 className="text-2xl font-bold">Leaderboard</h1>
-
-          <div
-            className="my-6 flex flex-row align-center"
-            style={{ display: "flex", alignItems: "center" }}
-          >
-            {!isSuccess && !!finished && (
-              <>
-                <Button
-                  onClick={onClickUpdateLeaderboard}
-                  isDisabled={isUpdatingLeaderboard}
-                >
-                  ADD MY RACE IN THE LEADERBOARD
-                </Button>
-
-                {isUpdatingLeaderboard && (
-                  <div className="ml-4 flex flex-row align-center justify-center">
-                    <CircularProgress size={20} />
-                  </div>
-                )}
-              </>
-            )}
-
-            {isSuccess && !isUpdatingLeaderboard && (
-              <div className="flex flex-row align-center justify-center">
-                Race entry added successfully!
-              </div>
-            )}
-          </div>
-
-          <table>
-            <thead>
-              <tr className="*:border-b-2 *:px-12 *:py-6 text-left *:font-bold">
-                <th>Rank</th>
-                <th>Player</th>
-                <th>Duration</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {formattedLeaderboard.map((item, index) => (
-                <tr key={item.key} className="*:px-12 *:py-6">
-                  <td>{index + 1}</td>
-                  <td title={item.player}>{item.shortAddress}</td>
-                  <td>{item.formattedDuration}</td>
-                  <td>{item.date}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       )}
+
+      <div>
+        <h1 className="text-2xl font-bold">Leaderboard</h1>
+
+        {isPending ? (
+          <div className="mt-20">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div className="mb-8" key={i}>
+                <Skeleton
+                  variant="rectangular"
+                  animation="wave"
+                  width={350}
+                  height={50}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <>
+            <div
+              className="my-6 flex flex-row align-center"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              {!isSuccess && !!finished && (
+                <>
+                  <Button
+                    onClick={onClickUpdateLeaderboard}
+                    isDisabled={isUpdatingLeaderboard}
+                  >
+                    ADD MY RACE IN THE LEADERBOARD
+                  </Button>
+
+                  {isUpdatingLeaderboard && (
+                    <div className="ml-4 flex flex-row align-center justify-center">
+                      <CircularProgress size={20} />
+                    </div>
+                  )}
+                </>
+              )}
+
+              {isSuccess && !isUpdatingLeaderboard && (
+                <div className="flex flex-row align-center justify-center">
+                  Race entry added successfully!
+                </div>
+              )}
+            </div>
+
+            <table>
+              <thead>
+                <tr className="*:border-b-2 *:px-12 *:py-6 text-left *:font-bold">
+                  <th>Rank</th>
+                  <th>Player</th>
+                  <th>Duration</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {formattedLeaderboard.map((item, index) => (
+                  <tr key={item.key} className="*:px-12 *:py-6">
+                    <td>{index + 1}</td>
+                    <td title={item.player}>{item.shortAddress}</td>
+                    <td>{item.formattedDuration}</td>
+                    <td>{item.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
+      </div>
     </div>
   );
 }
