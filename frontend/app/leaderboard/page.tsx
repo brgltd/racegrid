@@ -12,7 +12,7 @@ import { useReadContract, useWriteContract } from "wagmi";
 import { BigNumber } from "ethers";
 import { format } from "date-fns";
 import { Button } from "@/components/button";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Skeleton } from "@mui/material";
 
 interface BaseLeaderboard {
   player: string;
@@ -99,7 +99,7 @@ export default function LeaderboardPage() {
 
   const { writeContractAsync } = useWriteContract();
 
-  const { data: leaderboardLength } = useReadContract({
+  const { data: leaderboardLength, isPending } = useReadContract({
     address: sourceChain?.leaderboard,
     abi: leaderboardAbi,
     functionName: "getResultsLength",
@@ -169,6 +169,26 @@ export default function LeaderboardPage() {
     }
     setIsUpdatingLeaderboard(false);
   };
+
+  if (isPending) {
+    return (
+      <>
+        <h1 className="text-2xl font-bold">Leaderboard</h1>
+        <div className="my-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div className="mb-8" key={i}>
+              <Skeleton
+                variant="rectangular"
+                animation="wave"
+                width={350}
+                height={50}
+              />
+            </div>
+          ))}
+        </div>
+      </>
+    );
+  }
 
   return (
     <div>
