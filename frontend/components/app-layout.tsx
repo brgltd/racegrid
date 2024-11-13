@@ -9,9 +9,6 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { wagmiConfig } from "@/wagmi";
 import { Toast } from "@/components/toast";
-// import { Footer } from "@/components/footer";
-import "@rainbow-me/rainbowkit/styles.css";
-import "../app/globals.css";
 import { Navbar } from "./navbar";
 import { AppProvider } from "@/hooks/use-app-context";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
@@ -19,6 +16,9 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
+import { Footer } from "./footer";
+import "@rainbow-me/rainbowkit/styles.css";
+import "../app/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,7 +43,6 @@ export function AppLayout({
 }>) {
   const pathname = usePathname();
   const isGamePage = pathname === "/challenge";
-
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -63,8 +62,9 @@ export function AppLayout({
                         className={!isGamePage ? "mx-12" : ""}
                         style={!isGamePage ? { width: "1200px" } : {}}
                       >
-                        <Navbar />
-                        <main className="main">{children}</main>
+                        {!isGamePage && <Navbar />}
+                        <main>{children}</main>
+                        {!isGamePage && <Footer />}
                       </div>
                     </div>
                     <Toast />
