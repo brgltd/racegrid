@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Address } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
 import { MenuItem, TextField } from "@mui/material";
+import { Button } from "@/components/button";
 
 export const colors = [
   "red",
@@ -36,20 +37,11 @@ function buildTokenURI(color: string) {
 }
 
 export default function Card() {
-  const [color, setColor] = useState("red");
+  const [color, setColor] = useState(() => colorOptions[0].value);
 
   const { writeContractAsync } = useWriteContract();
 
-  const { sourceChain, userAddress } = useAppContext();
-
-  const { data: userToken } = useReadContract({
-    address: sourceChain?.raceGridNFT,
-    abi: raceGridNftAbi,
-    functionName: "userToTokenURI",
-    args: [userAddress as Address],
-    chainId: sourceChain?.definition?.id,
-    query: { enabled: !!sourceChain },
-  });
+  const { sourceChain } = useAppContext();
 
   const onClickMint = async () => {
     try {
@@ -81,7 +73,7 @@ export default function Card() {
           onChange={(e) => {
             setColor(e.target.value);
           }}
-          sx={{ width: "350px" }}
+          sx={{ width: "300px" }}
         >
           {colorOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
@@ -91,7 +83,13 @@ export default function Card() {
         </TextField>
       </div>
 
-      <button onClick={onClickMint}>mint</button>
+      <Button
+        onClick={onClickMint}
+        isDisabled={false}
+        styles={{ width: "300px" }}
+      >
+        Mint NFT
+      </Button>
     </div>
   );
 }
