@@ -41,7 +41,7 @@ export default function Card() {
 
   const { writeContractAsync } = useWriteContract();
 
-  const { sourceChain } = useAppContext();
+  const { sourceChain, handleError } = useAppContext();
 
   const onClickMint = async () => {
     try {
@@ -57,7 +57,7 @@ export default function Card() {
         chainId: sourceChain.definition?.id,
       });
     } catch (error) {
-      console.log(error);
+      handleError(error);
     }
   };
 
