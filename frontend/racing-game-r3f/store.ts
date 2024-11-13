@@ -6,6 +6,7 @@ import type { PublicApi, WheelInfoOptions } from "@react-three/cannon";
 import type { Group } from "three";
 import type { GetState, SetState, StateSelector } from "zustand";
 import { keys } from "./keys";
+import { colors } from "@/app/nft/page";
 
 export const angularVelocity = [0, 0.5, 0] as const;
 export const cameras = ["DEFAULT", "FIRST_PERSON", "BIRD_EYE"] as const;
@@ -138,6 +139,7 @@ type Actions = BooleanActions &
   TimerActions & {
     camera: () => void;
     reset: () => void;
+    enableGame: (userToken: string | undefined) => void;
   };
 
 export interface IState extends BaseState {
@@ -239,6 +241,14 @@ const useStoreImpl = create<IState>(
           return { ...state, finished: 0, start: 0 };
         });
       },
+
+      enableGame: (userToken: string | undefined) => {
+        const userColor = userToken?.match(/\/(\w+)\.json$/)?.[1];
+        const isColorValid = userColor && colors.includes(userColor);
+        if (isColorValid) {
+          setState({ color: userColor, isGameAllowed: true });
+        }
+      },
     };
 
     return {
@@ -270,8 +280,8 @@ const useStoreImpl = create<IState>(
         createRef<Group>(),
       ],
 
-      // isGameAllowed: false,
-      isGameAllowed: true,
+      isGameAllowed: false,
+      // isGameAllowed: true,
     };
   },
 );

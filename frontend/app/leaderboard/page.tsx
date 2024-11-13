@@ -160,6 +160,8 @@ export default function LeaderboardPage() {
     setFormattedLeaderboard(sortedLeaderboardData);
   };
 
+  console.log(JSON.stringify(formattedLeaderboard, null, 4));
+
   return (
     <div>
       {!!finished && (
@@ -184,7 +186,6 @@ export default function LeaderboardPage() {
               <tr>
                 <th>Rank</th>
                 <th>Player</th>
-                <th>Medal</th>
                 <th>Duration</th>
                 <th>Date</th>
               </tr>
@@ -194,7 +195,6 @@ export default function LeaderboardPage() {
                 <tr key={item.key}>
                   <td>{index + 1}</td>
                   <td>{item.player}</td>
-                  <td>gold</td>
                   <td>{item.formattedDuration}</td>
                   <td>{item.date}</td>
                 </tr>

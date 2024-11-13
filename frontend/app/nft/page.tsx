@@ -9,6 +9,8 @@ import { Address } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
 import { CircularProgress, MenuItem, TextField } from "@mui/material";
 import { Button } from "@/components/button";
+import Link from "next/link";
+import { useStore } from "@/racing-game-r3f/store";
 
 export const colors = [
   "red",
@@ -38,14 +40,20 @@ function buildTokenURI(color: string) {
 
 export default function Card() {
   const [color, setColor] = useState(colorOptions[0].value);
-  const [isMinting, setIsMinting] = useState(true);
+  const [isMinting, setIsMinting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const { writeContractAsync } = useWriteContract();
 
   const { sourceChain, handleError } = useAppContext();
 
+  const [actions] = useStore((s) => [s.actions]);
+
+  const { enableGame } = actions;
+
   const onClickMint = async () => {
     setIsMinting(true);
+    const userToken = buildTokenURI(color);
     try {
       const hash = await writeContractAsync({
         address: sourceChain?.raceGridNFT,
@@ -58,8 +66,11 @@ export default function Card() {
         hash,
         chainId: sourceChain.definition?.id,
       });
+      setIsSuccess(true);
+      enableGame(userToken);
     } catch (error) {
       handleError(error);
+      setIsSuccess(false);
     }
     setIsMinting(false);
   };
@@ -97,10 +108,19 @@ export default function Card() {
       </div>
 
       {isMinting && (
-        <div className="flex flex-row align-center">
+        <div className="flex flex-row align-center mb-10">
           <CircularProgress size={20} />
           <div className="ml-4">Minting in progress</div>
         </div>
+      )}
+
+      {isSuccess && !isMinting && (
+        <ul>
+          <li className="mb-8">NFT minted successfully!</li>
+          <li className="text-xl mb-10 underline hover:text-blue-400 w-fit transition-all">
+            <Link href="/challenge">Play Game</Link>
+          </li>
+        </ul>
       )}
     </div>
   );

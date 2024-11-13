@@ -2,12 +2,15 @@ import { useReadContract } from "wagmi";
 import { useAppContext } from "./use-app-context";
 import { raceGridNftAbi } from "@/abis";
 import { useEffect } from "react";
-import { colors } from "@/app/nft/page";
-import { setState } from "@/racing-game-r3f/store";
+import { useStore } from "@/racing-game-r3f/store";
 import { Address } from "viem";
 
 export function useReadNFT(isEnabled = true) {
   const { sourceChain, userAddress } = useAppContext();
+
+  const [actions] = useStore((s) => [s.actions]);
+
+  const { enableGame } = actions;
 
   const { data: userToken } = useReadContract({
     address: sourceChain?.raceGridNFT,
@@ -19,10 +22,6 @@ export function useReadNFT(isEnabled = true) {
   });
 
   useEffect(() => {
-    const userColor = userToken?.match(/\/(\w+)\.json/)?.[1];
-    const isColorValid = userColor && colors.includes(userColor);
-    if (isColorValid) {
-      setState({ color: userColor, isGameAllowed: true });
-    }
+    enableGame(userToken);
   }, [userToken]);
 }
