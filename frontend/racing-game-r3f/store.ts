@@ -106,15 +106,15 @@ export type BindableActionName =
 export type ActionInputMap = Record<BindableActionName, string[]>;
 
 const actionInputMap: any = {
-  backward: ["arrowdown", "s"],
+  backward: ["s", "arrowdown"],
   boost: ["shift"],
   brake: [" "],
   camera: ["c"],
-  forward: ["arrowup", "w", "z"],
+  forward: ["w", "arrowup"],
   help: ["h"],
-  left: ["arrowleft", "a"],
+  left: ["a", "arrowleft"],
   reset: ["r"],
-  right: ["arrowright", "d", "e"],
+  right: ["d", "arrowright"],
 };
 
 type Getter = GetState<IState>;
