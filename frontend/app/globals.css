@@ -539,3 +539,27 @@ button {
     opacity: 0;
   }
 }
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.row-item {
+  display: flex;
+  align-items: center;
+  color: black;
+  background: white;
+  padding: 0 8px;
+}
+
+.control-key {
+  margin-right: 8px;
+  width: 68px;
+}
+
+.control-text {
+  width: 60px;
+  height: 32px;
+}
