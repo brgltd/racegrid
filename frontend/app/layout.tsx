@@ -1,10 +1,9 @@
 import { AppLayout } from "@/components/app-layout";
 import type { Metadata } from "next";
 
-// TODO: add seo
 export const metadata: Metadata = {
-  title: "title",
-  description: "description",
+  title: "Race Grid | Home",
+  description: "Blockchain racing game",
 };
 
 export default function RootLayout({
