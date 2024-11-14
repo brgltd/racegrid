@@ -9,7 +9,7 @@ import {
   OrbitControls,
   Stats,
 } from "@react-three/drei";
-import { HideMouse, Keyboard } from "./controls";
+import { Keyboard } from "./controls";
 import { Cameras } from "./effects";
 import { BoundingBox, Track, Vehicle, Goal, Heightmap } from "./models";
 import {
@@ -27,7 +27,6 @@ import {
   Help,
   Editor,
   LeaderBoard,
-  Finished,
   PickColor,
 } from "./ui";
 import { useToggle } from "./useToggle";
