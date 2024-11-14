@@ -34,7 +34,9 @@ interface Hex {
 
 type LeaderboardResponse = [string, Hex, Hex];
 
-const CHUNCK_STEP = 2;
+const CHUNCK_STEP = 10;
+
+const NUM_CALLS_TO_SLEEP = 10;
 
 let counter = 0;
 
@@ -111,6 +113,7 @@ export default function LeaderboardPage() {
     const getChunckedLeaderboardData = async () => {
       const leaderboardLengthNumber = Number(leaderboardLength);
       const aggregatedLeaderboardData: FormattedLeaderboard[] = [];
+      let numCalls = 0;
       for (let i = 0; i < leaderboardLengthNumber; i += CHUNCK_STEP) {
         const endIndex = Math.min(i + CHUNCK_STEP, leaderboardLengthNumber);
         const leaderboardResponse = await getLeaderboardContract(
@@ -119,6 +122,12 @@ export default function LeaderboardPage() {
         const parsedLeaderboardResponse =
           parseLeaderboardResponse(leaderboardResponse);
         aggregatedLeaderboardData.push(...parsedLeaderboardResponse);
+        ++numCalls;
+        // If too many calls, sleep for some time to avoid rate limit on public rpcs.
+        if (numCalls === NUM_CALLS_TO_SLEEP) {
+          await sleep();
+          numCalls = 0;
+        }
       }
       const sortedLeaderboardData = sortLeaderboardData(
         aggregatedLeaderboardData,
