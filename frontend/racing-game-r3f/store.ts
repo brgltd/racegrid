@@ -117,7 +117,7 @@ const actionInputMap: ActionInputMap = {
   help: ["i"],
   honk: ["h"],
   leaderboard: ["l"],
-  left: ["arrowleft", "a", "q"],
+  left: ["arrowleft", "a"],
   map: ["m"],
   pickcolor: ["p"],
   reset: ["r"],
@@ -280,8 +280,8 @@ const useStoreImpl = create<IState>(
         createRef<Group>(),
       ],
 
-      isGameAllowed: false,
-      // isGameAllowed: true,
+      // isGameAllowed: false,
+      isGameAllowed: true,
     };
   },
 );

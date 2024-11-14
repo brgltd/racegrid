@@ -26,9 +26,9 @@ export default function HomePage() {
             <Tooltip
               placement="right"
               title={
-                <h1 style={{ fontSize: 20 }}>
+                <div style={{ fontSize: 20 }}>
                   Purchase an NFT to play the Race Challenge
-                </h1>
+                </div>
               }
             >
               <div className="text-2xl mb-10 w-fit">Play Challenge</div>

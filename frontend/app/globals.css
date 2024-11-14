@@ -30,7 +30,7 @@ body {
   box-sizing: border-box;
 }
 
-/* html,
+html,
 body,
 .main {
   width: 100vw;
@@ -38,7 +38,7 @@ body,
   margin: 0;
   padding: 0;
   overflow: hidden;
-} */
+}
 
 body {
   background: linear-gradient(
