@@ -24,10 +24,7 @@ export const vehicleConfig = {
   steer: 0.3,
   force: 1800,
   maxBrake: 65,
-  // maxSpeed: 88,
-  // maxSpeed: 50,
-  maxSpeed: 40,
-  // maxSpeed: 35,
+  maxSpeed: 30,
 } as const;
 
 type VehicleConfig = typeof vehicleConfig;
