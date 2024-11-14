@@ -63,7 +63,7 @@ export function Help(): JSX.Element {
               onClick={() => set({ help: true })}
               className="row-item control-key"
             >
-              I
+              H
             </button>
             <div className="row-item control-text">Help</div>
           </div>
