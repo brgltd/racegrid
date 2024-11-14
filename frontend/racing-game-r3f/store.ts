@@ -89,7 +89,6 @@ const controls = {
   boost: false,
   brake: false,
   forward: false,
-  honk: false,
   left: false,
   right: false,
 };
@@ -101,28 +100,21 @@ export const isControl = (v: PropertyKey): v is Control =>
 export type BindableActionName =
   | Control
   | ExclusiveBoolean
-  | Extract<Booleans, "editor" | "map" | "sound">
   | "camera"
   | "reset";
 
 export type ActionInputMap = Record<BindableActionName, string[]>;
 
-const actionInputMap: ActionInputMap = {
+const actionInputMap: any = {
   backward: ["arrowdown", "s"],
   boost: ["shift"],
   brake: [" "],
   camera: ["c"],
-  editor: ["."],
   forward: ["arrowup", "w", "z"],
   help: ["h"],
-  honk: ["n"],
-  leaderboard: ["l"],
   left: ["arrowleft", "a"],
-  map: ["m"],
-  pickcolor: ["p"],
   reset: ["r"],
   right: ["arrowright", "d", "e"],
-  sound: ["u"],
 };
 
 type Getter = GetState<IState>;

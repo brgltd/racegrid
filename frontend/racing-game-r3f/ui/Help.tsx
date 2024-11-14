@@ -70,7 +70,7 @@ export function Help(): JSX.Element {
         )}
         <div className={`popup ${help ? "open" : ""}`}>
           <button className="popup-close" onClick={() => set({ help: false })}>
-            i
+            H
           </button>
           <div className="popup-content">
             <Keys />
