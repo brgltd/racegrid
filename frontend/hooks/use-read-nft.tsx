@@ -12,7 +12,7 @@ export function useReadNFT(isEnabled = true) {
 
   const { enableGame } = actions;
 
-  const { data: userToken } = useReadContract({
+  const { data: userToken, isPending: isPendingUserToken } = useReadContract({
     address: sourceChain?.raceGridNFT,
     abi: raceGridNftAbi,
     functionName: "userToTokenURI",
@@ -24,4 +24,6 @@ export function useReadNFT(isEnabled = true) {
   useEffect(() => {
     enableGame(userToken);
   }, [userToken]);
+
+  return { isPendingUserToken };
 }
