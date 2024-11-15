@@ -13,8 +13,8 @@ else
   exit 1
 fi
 
-echo $rpc_url
+echo deploying to $1 with $rpc_url
 
-# forge script script/DeployRaceGridNFT.s.sol:DeployRaceGridNFT --rpc-url $rpc_url --broadcast -vvvv
+forge script script/DeployRaceGridNFT.s.sol:DeployRaceGridNFT --rpc-url $rpc_url --broadcast -vvvv
 
-# forge script script/DeployLeaderboard.s.sol:DeployLeaderboard --rpc-url $rpc_url --broadcast -vvvv
+forge script script/DeployLeaderboard.s.sol:DeployLeaderboard --rpc-url $rpc_url --broadcast -vvvv

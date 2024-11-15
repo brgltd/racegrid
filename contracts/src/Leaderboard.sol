@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-contract Leaderboard {
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+
+contract Leaderboard is Ownable {
     struct Result {
         address player;
         uint256 time;
@@ -10,7 +12,10 @@ contract Leaderboard {
 
     Result[] private results;
 
-    // TODO: for hackathon or testnets it's okay to leave this open. For mainnet needs to be `onlyOwner`.
+    constructor() Ownable(msg.sender) {}
+
+    /// @notice Add new entry to the leaderboard.
+    // For hackathon or testnets it's okay to leave this open. For mainnet needs to be `onlyOwner`.
     function updateLeaderboard(address player, uint256 time) external {
         results.push(Result({player: player, time: time, date: block.timestamp}));
     }
@@ -28,6 +33,28 @@ contract Leaderboard {
         return paginatedResults;
     }
 
+    /// @notice Delete one entry from the leaderboard.
+    /// @dev Mainly used for testing.
+    function deleteLeaderboardEntry(uint256 targetIndex) external onlyOwner {
+        Result[] memory resultsCopy = results;
+        uint256 lastIndex = results.length - 1;
+        if (targetIndex != lastIndex) {
+            Result memory lastItem = resultsCopy[targetIndex];
+            results[lastIndex] = resultsCopy[targetIndex];
+            results[targetIndex] = lastItem;
+        }
+        results.pop();
+    }
+
+    /// @notice Delete the entire leaderboard.
+    /// @dev Mainly used for testing.
+    function deleteLeaderboard() external onlyOwner {
+        Result[] memory emptyResults;
+        results = emptyResults;
+    }
+
+    /// @notice Retrive leaderboard length.
+    /// @dev Can to be used when calling with pagination.
     function getResultsLength() external view returns (uint256) {
         return results.length;
     }
