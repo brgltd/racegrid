@@ -98,6 +98,7 @@ export default function LeaderboardPage() {
   const [isFetchingLeaderboard, setIsFetchingLeaderboard] = useState(true);
   const [isUpdatingLeaderboard, setIsUpdatingLeaderboard] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [txLink, setTxLink] = useState("");
 
   const { sourceChain, userAddress, handleError } = useAppContext();
 
@@ -166,6 +167,7 @@ export default function LeaderboardPage() {
         args: [userAddress as Address, BigInt(finished)],
         chainId: sourceChain?.definition?.id,
       });
+      setTxLink(`https://hekla.taikoscan.io/tx/${hash}`);
       await waitForTransactionReceipt(config, {
         hash,
         chainId: sourceChain?.definition?.id,
@@ -236,8 +238,18 @@ export default function LeaderboardPage() {
                     ADD MY RACE IN THE LEADERBOARD
                   </Button>
 
+                  {txLink && (
+                    <a
+                      href={txLink}
+                      target="_blank"
+                      className="text-xl mx-8 underline hover:text-blue-400 w-fit transition-all inline-block"
+                    >
+                      Open TX
+                    </a>
+                  )}
+
                   {isUpdatingLeaderboard && (
-                    <div className="ml-4 flex flex-row align-center justify-center">
+                    <div className="flex flex-row align-center justify-center">
                       <CircularProgress size={20} />
                     </div>
                   )}
@@ -245,9 +257,21 @@ export default function LeaderboardPage() {
               )}
 
               {isSuccess && !isUpdatingLeaderboard && (
-                <div className="flex flex-row align-center justify-center">
-                  Race entry added successfully!
-                </div>
+                <>
+                  <div className="flex flex-row align-center justify-center text-xl">
+                    Race entry added successfully!
+                  </div>
+
+                  {txLink && (
+                    <a
+                      href={txLink}
+                      target="_blank"
+                      className="text-xl ml-4 underline hover:text-blue-400 w-fit transition-all inline-block"
+                    >
+                      Open TX
+                    </a>
+                  )}
+                </>
               )}
             </div>
 
