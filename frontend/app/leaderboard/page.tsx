@@ -34,9 +34,9 @@ interface Hex {
 
 type LeaderboardResponse = [string, Hex, Hex];
 
-const CHUNCK_STEP = 10;
+const CHUNCK_STEP = 5;
 
-const NUM_CALLS_TO_SLEEP = 10;
+const NUM_CALLS_TO_SLEEP = 20;
 
 let counter = 0;
 
