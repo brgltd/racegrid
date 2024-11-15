@@ -22,7 +22,7 @@ export default function HomePage() {
             <Link href="/challenge">Play Challenge</Link>
           </li>
         ) : (
-          <li>
+          <li className="text-2xl mb-10 w-fit">
             <Tooltip
               placement="right"
               title={
@@ -31,7 +31,7 @@ export default function HomePage() {
                 </div>
               }
             >
-              <div className="text-2xl mb-10 w-fit">Play Challenge</div>
+              <div>Play Challenge</div>
             </Tooltip>
           </li>
         )}

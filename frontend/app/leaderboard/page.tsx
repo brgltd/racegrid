@@ -63,7 +63,7 @@ function formatLeaderboardData(
   const formattedLeaderboard = {
     ...leaderboardData,
     shortAddress: shortAddress,
-    date: format(leaderboardData.timestamp * 1000, "dd MMMM yyyy"),
+    date: format(leaderboardData.timestamp * 1000, "dd MMMM yyyy KK:mmbbb"),
     formattedDuration: formatRaceDurationToSeconds(leaderboardData.duration),
     key: counter,
   };
@@ -91,7 +91,7 @@ function sortLeaderboardData(leaderboardData: FormattedLeaderboard[]) {
 
 export default function LeaderboardPage() {
   const [finished] = useStore((s) => [s.finished]);
-  const [localFinished, setLocalFinished] = useState(finished);
+  const [localFinished] = useState(finished);
   const [formattedLeaderboard, setFormattedLeaderboard] = useState<
     FormattedLeaderboard[]
   >([]);
