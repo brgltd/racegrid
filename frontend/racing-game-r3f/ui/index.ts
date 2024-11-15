@@ -4,6 +4,5 @@ export * from "./Finished";
 export * from "./Help";
 export * from "./Minimap";
 export * from "./Intro";
-export * from "./LeaderBoard";
 export * from "./Checkpoint";
 export * from "./PickColor";

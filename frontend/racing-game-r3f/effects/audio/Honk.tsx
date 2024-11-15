@@ -7,10 +7,10 @@ import { useStore } from "../../store";
 
 export const HonkAudio = () => {
   const ref = useRef<PositionalAudioImpl>(null);
-  const [honk, sound] = useStore(({ controls: { honk }, sound }) => [
-    honk,
-    sound,
-  ]);
+  // const [honk, sound] = useStore(({ controls: { honk }, sound }) => [
+  //   honk,
+  //   sound,
+  // ]);
 
   // useEffect(() => {
   //   if (ref.current && sound) {

@@ -5,29 +5,12 @@ import { config } from "@/wagmi";
 import { useAppContext } from "@/hooks/use-app-context";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { useState } from "react";
-import { Address } from "viem";
-import { useReadContract, useWriteContract } from "wagmi";
+import { useWriteContract } from "wagmi";
 import { CircularProgress, MenuItem, TextField } from "@mui/material";
 import { Button } from "@/components/button";
 import Link from "next/link";
 import { useStore } from "@/racing-game-r3f/store";
-
-export const colors = [
-  "red",
-  "green",
-  "blue",
-  "yellow",
-  "orange",
-  "purple",
-  "white",
-  "black",
-  "gray",
-];
-
-const colorOptions = colors.map((color) => ({
-  value: color,
-  label: `${color[0].toUpperCase()}${color.slice(1)}`,
-}));
+import { colorOptions } from "@/utils/colors";
 
 function buildTokenURI(color: string) {
   const prefix =

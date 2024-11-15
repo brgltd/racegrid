@@ -6,7 +6,7 @@ import type { PublicApi, WheelInfoOptions } from "@react-three/cannon";
 import type { Group } from "three";
 import type { GetState, SetState, StateSelector } from "zustand";
 import { keys } from "./keys";
-import { colors } from "@/app/nft/page";
+import { colors } from "@/utils/colors";
 
 export const angularVelocity = [0, 0.5, 0] as const;
 export const cameras = ["DEFAULT", "FIRST_PERSON", "BIRD_EYE"] as const;
@@ -268,9 +268,7 @@ const useStoreImpl = create<IState>(
         createRef<Group>(),
         createRef<Group>(),
       ],
-
-      // isGameAllowed: false,
-      isGameAllowed: true,
+      isGameAllowed: false,
     };
   },
 );
