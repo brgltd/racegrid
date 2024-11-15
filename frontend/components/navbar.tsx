@@ -1,5 +1,6 @@
 "use client";
 
+import { useAppContext } from "@/hooks/use-app-context";
 import { cn } from "@/utils/cn";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Link from "next/link";
@@ -14,6 +15,11 @@ export function Navbar() {
   const baseItemStyle =
     "mr-12 hover-glow hover:text-blue-400 transition-all border-t-2 border-transparent";
   const activeItemStyle = "border-t-2 border-white";
+
+  const { sourceChain, userAddress } = useAppContext();
+
+  const chainName = sourceChain?.name;
+
   return isChallengePage ? null : (
     <nav>
       <ul className="flex lg:flex-row flex-col lg:items-center mt-6 mb-16 justify-center">
@@ -33,16 +39,26 @@ export function Navbar() {
             <Link href="/leaderboard">LEADERBOARD</Link>
           </li>
         </ul>
-        <li className="lg:ml-auto">
-          <ConnectButton
-            chainStatus="full"
-            showBalance={false}
-            accountStatus={{
-              smallScreen: "avatar",
-              largeScreen: "full",
-            }}
-          />
-        </li>
+        <ul className="flex flex-row lg:ml-auto">
+          {chainName && userAddress && (
+            <li
+              className="bg-black"
+              style={{ padding: "8px 10px", borderRadius: "16px" }}
+            >
+              {chainName}
+            </li>
+          )}
+          <li className="lg:ml-4">
+            <ConnectButton
+              chainStatus="full"
+              showBalance={false}
+              accountStatus={{
+                smallScreen: "avatar",
+                largeScreen: "full",
+              }}
+            />
+          </li>
+        </ul>
       </ul>
     </nav>
   );

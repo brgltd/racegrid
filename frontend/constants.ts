@@ -1,4 +1,4 @@
-import { zeroAddress, Address } from "viem";
+import { Address } from "viem";
 
 export const Constants = {
   Anvil: {

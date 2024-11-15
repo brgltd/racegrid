@@ -1,4 +1,4 @@
-import { anvil } from "wagmi/chains";
+import { anvil, taikoHekla } from "wagmi/chains";
 import { Address, Chain as Definition } from "viem";
 import { Constants } from "@/constants";
 
@@ -22,7 +22,18 @@ export const anvilChain = {
   leaderboard: Constants.Anvil.Leaderboard,
 };
 
-const supportedChains: Chain[] = [anvilChain];
+export const taikoTestnetChain = {
+  chainSelector: 167009,
+  name: "Taiko Hekla L2",
+  img: 0,
+  definition: taikoHekla,
+  raceGridNFT: Constants.TaikoTestnet.RaceGridNFT,
+  leaderboard: Constants.TaikoTestnet.Leaderboard,
+};
+
+const supportedChains: Chain[] = [
+  process.env.NODE_ENV === "production" ? taikoTestnetChain : anvilChain,
+];
 
 export const chainDefinitions = supportedChains.map(
   (chain) => chain.definition,
