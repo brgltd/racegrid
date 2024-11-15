@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useGLTF, useTexture } from "@react-three/drei";
 import { useReadNFT } from "@/hooks/use-read-nft";
 import { Tooltip } from "@mui/material";
+import { useEffect } from "react";
 
 useTexture.preload("/textures/heightmap_1024.png");
 useGLTF.preload("/models/track-draco.glb");
@@ -14,6 +15,11 @@ useGLTF.preload("/models/wheel-draco.glb");
 export default function HomePage() {
   const [isGameAllowed] = useStore((s) => [s.isGameAllowed]);
   useReadNFT();
+
+  useEffect(() => {
+    document.title = "Race Grid | Home";
+  }, []);
+
   return (
     <div>
       <ul>

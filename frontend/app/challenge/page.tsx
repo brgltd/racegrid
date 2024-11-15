@@ -16,5 +16,9 @@ export default function Challenge() {
     }
   }, [isGameAllowed]);
 
+  useEffect(() => {
+    document.title = "Race Grid | Challenge";
+  }, []);
+
   return isGameAllowed ? <RacingGame /> : null;
 }

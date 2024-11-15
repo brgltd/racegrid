@@ -151,6 +151,10 @@ export default function LeaderboardPage() {
     }
   }, [leaderboardLength]);
 
+  useEffect(() => {
+    document.title = "Race Grid | Leaderboard";
+  });
+
   const onClickUpdateLeaderboard = async () => {
     setIsUpdatingLeaderboard(true);
     try {

@@ -4,7 +4,7 @@ import { raceGridNftAbi } from "@/abis";
 import { config } from "@/wagmi";
 import { useAppContext } from "@/hooks/use-app-context";
 import { waitForTransactionReceipt } from "@wagmi/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useWriteContract } from "wagmi";
 import { CircularProgress, MenuItem, TextField } from "@mui/material";
 import { Button } from "@/components/button";
@@ -33,6 +33,10 @@ export default function Card() {
   const [actions] = useStore((s) => [s.actions]);
 
   const { enableGame } = actions;
+
+  useEffect(() => {
+    document.title = "Race Grid | Mint NFT";
+  }, []);
 
   const onClickMint = async () => {
     setIsMinting(true);
