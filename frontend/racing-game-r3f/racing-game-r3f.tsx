@@ -68,10 +68,7 @@ function Carpet() {
 
 export function RacingGameR3F(): JSX.Element {
   const [light, setLight] = useState<DirectionalLight | null>(null);
-
   const [shouldResetClock, setShouldResetClock] = useState(false);
-
-  const router = useRouter();
 
   const [actions, dpr, editor, shadows] = useStore((s) => [
     s.actions,
@@ -82,14 +79,15 @@ export function RacingGameR3F(): JSX.Element {
 
   const { onStart, onFinish } = actions;
 
+  const router = useRouter();
+  const pathname = usePathname();
+
   const ToggledCheckpoint = useToggle(Checkpoint, "checkpoint");
   const ToggledDebug = useToggle(Debug, "debug");
   const ToggledEditor = useToggle(Editor, "editor");
   const ToggledMap = useToggle(Minimap, "map");
   const ToggledOrbitControls = useToggle(OrbitControls, "editor");
   const ToggledStats = useToggle(Stats, "stats");
-
-  const pathname = usePathname();
 
   const onFinishRace = () => {
     onFinish();
