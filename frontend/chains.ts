@@ -31,8 +31,12 @@ export const taikoTestnetChain = {
   leaderboard: Constants.TaikoTestnet.Leaderboard,
 };
 
+// const supportedChains: Chain[] = [
+//   process.env.NODE_ENV === "production" ? taikoTestnetChain : anvilChain,
+// ];
+
 const supportedChains: Chain[] = [
-  process.env.NODE_ENV === "production" ? taikoTestnetChain : anvilChain,
+  process.env.NODE_ENV === "production" ? taikoTestnetChain : taikoTestnetChain,
 ];
 
 export const chainDefinitions = supportedChains.map(
