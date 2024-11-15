@@ -1,0 +1,11 @@
+{
+  "attributes": [
+    {
+      "trait_type": "color",
+      "value": "yellow"
+    }
+  ],
+  "description": "A collection of cars for the RaceGrid ecosystem.",
+  "image": "http://localhost:3000/cars/yellow.png",
+  "name": "Race Grid Red Car"
+}

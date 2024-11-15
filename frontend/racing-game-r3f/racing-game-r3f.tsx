@@ -26,7 +26,6 @@ import {
   Intro,
   Help,
   Editor,
-  LeaderBoard,
   PickColor,
 } from "./ui";
 import { useToggle } from "./useToggle";
@@ -200,7 +199,6 @@ export function RacingGameR3F(): JSX.Element {
         <Speed />
         <ToggledStats />
         <ToggledCheckpoint />
-        <LeaderBoard />
         <PickColor />
         <Keyboard />
       </Intro>
