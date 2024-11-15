@@ -31,12 +31,11 @@ export const taikoTestnetChain = {
   leaderboard: Constants.TaikoTestnet.Leaderboard,
 };
 
-// const supportedChains: Chain[] = [
-//   process.env.NODE_ENV === "production" ? taikoTestnetChain : anvilChain,
-// ];
-
 const supportedChains: Chain[] = [
-  process.env.NODE_ENV === "production" ? taikoTestnetChain : taikoTestnetChain,
+  process.env.NODE_ENV === "production" ||
+  process.env.NEXT_PUBLIC_ENABLE_PROD_SIMULATION === "true"
+    ? taikoTestnetChain
+    : anvilChain,
 ];
 
 export const chainDefinitions = supportedChains.map(
@@ -58,3 +57,13 @@ export const supportedChainsMapBySelector = supportedChains.reduce(
   },
   {},
 );
+
+export function getTargetChain() {
+  if (
+    process.env.NODE_ENV === "production" ||
+    process.env.NEXT_PUBLIC_ENABLE_PROD_SIMULATION === "true"
+  ) {
+    return taikoTestnetChain;
+  }
+  return anvilChain;
+}

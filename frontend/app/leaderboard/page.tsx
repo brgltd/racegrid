@@ -13,6 +13,7 @@ import { BigNumber } from "ethers";
 import { format } from "date-fns";
 import { Button } from "@/components/button";
 import { CircularProgress, Skeleton } from "@mui/material";
+import { getTargetChain } from "@/chains";
 
 interface BaseLeaderboard {
   player: string;
@@ -94,6 +95,7 @@ export default function LeaderboardPage() {
   const [formattedLeaderboard, setFormattedLeaderboard] = useState<
     FormattedLeaderboard[]
   >([]);
+  const [isFetchingLeaderboard, setIsFetchingLeaderboard] = useState(true);
   const [isUpdatingLeaderboard, setIsUpdatingLeaderboard] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -101,39 +103,49 @@ export default function LeaderboardPage() {
 
   const { writeContractAsync } = useWriteContract();
 
-  const { data: leaderboardLength, isPending } = useReadContract({
-    address: sourceChain?.leaderboard,
-    abi: leaderboardAbi,
-    functionName: "getResultsLength",
-    chainId: sourceChain?.definition?.id,
-    query: { enabled: !!sourceChain },
-  });
+  const { data: leaderboardLength, isPending: isPendingLeaderboardLength } =
+    useReadContract({
+      address: sourceChain?.leaderboard,
+      abi: leaderboardAbi,
+      functionName: "getResultsLength",
+      chainId: sourceChain?.definition?.id,
+      query: { enabled: !!sourceChain },
+    });
 
   useEffect(() => {
     const getChunckedLeaderboardData = async () => {
+      const targetChain = getTargetChain();
+      setIsFetchingLeaderboard(true);
       const leaderboardLengthNumber = Number(leaderboardLength);
       const aggregatedLeaderboardData: FormattedLeaderboard[] = [];
-      let numCalls = 0;
-      for (let i = 0; i < leaderboardLengthNumber; i += CHUNCK_STEP) {
-        const endIndex = Math.min(i + CHUNCK_STEP, leaderboardLengthNumber);
-        const leaderboardResponse = await getLeaderboardContract(
-          sourceChain?.name,
-        ).getResultsPaginated(i, endIndex);
-        const parsedLeaderboardResponse =
-          parseLeaderboardResponse(leaderboardResponse);
-        aggregatedLeaderboardData.push(...parsedLeaderboardResponse);
-        ++numCalls;
-        // If too many calls, sleep for some time to avoid rate limit on public rpcs.
-        if (numCalls === NUM_CALLS_TO_SLEEP) {
-          await sleep();
-          numCalls = 0;
+      try {
+        let numCalls = 0;
+        for (let i = 0; i < leaderboardLengthNumber; i += CHUNCK_STEP) {
+          const endIndex = Math.min(i + CHUNCK_STEP, leaderboardLengthNumber);
+          const leaderboardResponse = await getLeaderboardContract(
+            targetChain.name,
+          ).getResultsPaginated(i, endIndex);
+          const parsedLeaderboardResponse =
+            parseLeaderboardResponse(leaderboardResponse);
+          aggregatedLeaderboardData.push(...parsedLeaderboardResponse);
+          ++numCalls;
+          // If too many calls, sleep for some time to avoid rate limit on public rpcs.
+          if (numCalls === NUM_CALLS_TO_SLEEP) {
+            console.debug("sleeping to avoid rate limit on public rpcs");
+            await sleep();
+            numCalls = 0;
+          }
         }
+        const sortedLeaderboardData = sortLeaderboardData(
+          aggregatedLeaderboardData,
+        );
+        setFormattedLeaderboard(sortedLeaderboardData);
+      } catch (error) {
+        handleError(error);
       }
-      const sortedLeaderboardData = sortLeaderboardData(
-        aggregatedLeaderboardData,
-      );
-      setFormattedLeaderboard(sortedLeaderboardData);
+      setIsFetchingLeaderboard(false);
     };
+
     if (leaderboardLength) {
       getChunckedLeaderboardData();
     }
@@ -192,7 +204,7 @@ export default function LeaderboardPage() {
       <div>
         <h1 className="text-2xl font-bold">Leaderboard</h1>
 
-        {isPending ? (
+        {isPendingLeaderboardLength || isFetchingLeaderboard ? (
           <div className="mt-20">
             {Array.from({ length: 3 }).map((_, i) => (
               <div className="mb-8" key={i}>
