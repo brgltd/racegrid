@@ -6,6 +6,6 @@
     }
   ],
   "description": "A collection of cars for the RaceGrid ecosystem.",
-  "image": "http://localhost:3000/cars/purple.png",
+  "image": "https://racegrid.vercel.app/cars/purple.png",
   "name": "Race Grid Red Car"
 }
