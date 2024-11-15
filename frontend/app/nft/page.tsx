@@ -25,6 +25,7 @@ export default function Card() {
   const [color, setColor] = useState(colorOptions[0].value);
   const [isMinting, setIsMinting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [txLink, setTxLink] = useState("");
 
   const { writeContractAsync } = useWriteContract();
 
@@ -49,10 +50,16 @@ export default function Card() {
         args: [buildTokenURI(color)],
         chainId: sourceChain?.definition?.id,
       });
-      await waitForTransactionReceipt(config, {
+      setTxLink(`https://hekla.taikoscan.io/tx/${hash}`);
+      const receipt = await waitForTransactionReceipt(config, {
         hash,
         chainId: sourceChain.definition?.id,
       });
+      console.log("hash");
+      console.log(hash);
+      console.log("receipt");
+      console.log(receipt);
+
       setIsSuccess(true);
       enableGame(userToken);
     } catch (error) {
@@ -97,17 +104,28 @@ export default function Card() {
       {isMinting && (
         <div className="flex flex-row align-center mb-10">
           <CircularProgress size={20} />
-          <div className="ml-4">Minting in progress</div>
+          <div className="ml-4 txt-xl">Minting in progress</div>
         </div>
       )}
 
       {isSuccess && !isMinting && (
-        <ul>
-          <li className="mb-8">NFT minted successfully!</li>
-          <li className="text-xl mb-10 underline hover:text-blue-400 w-fit transition-all">
-            <Link href="/challenge">Play Game</Link>
-          </li>
-        </ul>
+        <div className="mb-8 text-xl">NFT minted successfully!</div>
+      )}
+
+      {txLink && (
+        <a
+          href={txLink}
+          target="_blank"
+          className="text-xl mb-8 underline hover:text-blue-400 w-fit transition-all inline-block"
+        >
+          Open TX
+        </a>
+      )}
+
+      {isSuccess && !isMinting && (
+        <div className="text-xl mb-8 underline hover:text-blue-400 w-fit transition-all">
+          <Link href="/challenge">Play Game</Link>
+        </div>
       )}
     </div>
   );
