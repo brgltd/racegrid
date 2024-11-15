@@ -9,10 +9,10 @@ contract RaceGridNFT is ERC721 {
     /// @notice The token id counter.
     uint256 private tokenId;
 
-    /// @notice Map an token id to token URI.
+    /// @notice Map a token id to the token URI.
     mapping(uint256 id => string uri) public tokenIdToURI;
 
-    /// @notice Map an address to token URI.
+    /// @notice Map an address to the token URI.
     /// @dev Last token owned by an address.
     mapping(address user => string uri) public userToTokenURI;
 

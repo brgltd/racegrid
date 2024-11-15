@@ -16,7 +16,7 @@ contract Leaderboard is Ownable {
     /// @notice The list of results.
     Result[] private results;
 
-    /// @notice Initialize the contract with caller as owner.
+    /// @notice Initialize the contract with the caller as owner.
     constructor() Ownable(msg.sender) {}
 
     /// @notice Add new entry to the leaderboard.
@@ -60,8 +60,7 @@ contract Leaderboard is Ownable {
     /// @notice Delete the entire leaderboard.
     /// @dev Mainly used for testing.
     function deleteLeaderboard() external onlyOwner {
-        Result[] memory emptyResults;
-        results = emptyResults;
+        delete results;
     }
 
     /// @notice Retrive leaderboard length.
