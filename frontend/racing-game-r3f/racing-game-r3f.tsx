@@ -69,6 +69,8 @@ function Carpet() {
 export function RacingGameR3F(): JSX.Element {
   const [light, setLight] = useState<DirectionalLight | null>(null);
 
+  const [shouldResetClock, setShouldResetClock] = useState(false);
+
   const router = useRouter();
 
   const [actions, dpr, editor, shadows] = useStore((s) => [
@@ -91,6 +93,7 @@ export function RacingGameR3F(): JSX.Element {
 
   const onFinishRace = () => {
     onFinish();
+    setShouldResetClock(true);
     router.push("/leaderboard");
   };
 
@@ -193,7 +196,7 @@ export function RacingGameR3F(): JSX.Element {
           <ToggledMap />
           <ToggledOrbitControls />
         </Canvas>
-        <Clock />
+        <Clock shouldReset={shouldResetClock} />
         <ToggledEditor />
         <Help />
         <Speed />

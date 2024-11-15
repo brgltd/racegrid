@@ -114,10 +114,10 @@ export default function LeaderboardPage() {
 
   useEffect(() => {
     const getChunckedLeaderboardData = async () => {
-      const targetChain = getTargetChain();
       setIsFetchingLeaderboard(true);
       const leaderboardLengthNumber = Number(leaderboardLength);
       const aggregatedLeaderboardData: FormattedLeaderboard[] = [];
+      const targetChain = getTargetChain();
       try {
         let numCalls = 0;
         for (let i = 0; i < leaderboardLengthNumber; i += CHUNCK_STEP) {
