@@ -108,7 +108,7 @@ export function RacingGameR3F(): JSX.Element {
   });
 
   return (
-    <div className="main">
+    <div className="game">
       <Intro>
         <Canvas
           key={`${dpr}${shadows}`}
