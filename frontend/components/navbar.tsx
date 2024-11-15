@@ -42,8 +42,11 @@ export function Navbar() {
         <ul className="flex flex-row lg:ml-auto">
           {chainName && userAddress && (
             <li
-              className="bg-black"
-              style={{ padding: "8px 10px", borderRadius: "16px" }}
+              style={{
+                padding: "8px 10px",
+                borderRadius: "16px",
+                backgroundColor: "rgb(23 25 29)",
+              }}
             >
               {chainName}
             </li>
