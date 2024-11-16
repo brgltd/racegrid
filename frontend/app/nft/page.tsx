@@ -103,7 +103,7 @@ export default function Card() {
 
       {isMinting && (
         <div className="flex flex-row align-center mb-10">
-          <CircularProgress size={20} />
+          <CircularProgress size={32} />
           <div className="ml-4 txt-xl">Minting in progress</div>
         </div>
       )}

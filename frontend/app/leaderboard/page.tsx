@@ -242,14 +242,14 @@ export default function LeaderboardPage() {
                     <a
                       href={txLink}
                       target="_blank"
-                      className="text-xl mx-8 underline hover:text-blue-400 w-fit transition-all inline-block"
+                      className="text-xl ml-8 underline hover:text-blue-400 w-fit transition-all inline-block"
                     >
                       Open TX
                     </a>
                   )}
 
                   {isUpdatingLeaderboard && (
-                    <div className="flex flex-row align-center justify-center">
+                    <div className="flex flex-row align-center justify-center ml-8">
                       <CircularProgress size={20} />
                     </div>
                   )}
