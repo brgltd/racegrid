@@ -30,12 +30,13 @@ body {
   box-sizing: border-box;
 }
 
-.main {
+.game {
   width: 100vw;
   height: 100vh;
   margin: 0;
   padding: 0;
   overflow: hidden;
+  cursor: none;
 }
 
 body {
@@ -547,8 +548,8 @@ button {
 .row-item {
   display: flex;
   align-items: center;
-  color: black;
-  background: white;
+  color: white;
+  background: black;
   padding: 0 8px;
 }
 
@@ -560,4 +561,14 @@ button {
 .control-text {
   width: 60px;
   height: 32px;
+}
+
+.redirecting {
+  display: flex;
+  margin: 32px;
+}
+
+.redirecting-text {
+  font-size: 32px;
+  margin-right: 32px;
 }

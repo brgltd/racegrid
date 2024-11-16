@@ -13,6 +13,7 @@ import { BigNumber } from "ethers";
 import { format } from "date-fns";
 import { Button } from "@/components/button";
 import { CircularProgress, Skeleton } from "@mui/material";
+import { getTargetChain } from "@/chains";
 
 interface BaseLeaderboard {
   player: string;
@@ -62,7 +63,7 @@ function formatLeaderboardData(
   const formattedLeaderboard = {
     ...leaderboardData,
     shortAddress: shortAddress,
-    date: format(leaderboardData.timestamp * 1000, "dd MMMM yyyy"),
+    date: format(leaderboardData.timestamp * 1000, "dd MMMM yyyy KK:mmbbb"),
     formattedDuration: formatRaceDurationToSeconds(leaderboardData.duration),
     key: counter,
   };
@@ -90,54 +91,70 @@ function sortLeaderboardData(leaderboardData: FormattedLeaderboard[]) {
 
 export default function LeaderboardPage() {
   const [finished] = useStore((s) => [s.finished]);
-  const [localFinished, setLocalFinished] = useState(finished);
+  const [localFinished] = useState(finished);
   const [formattedLeaderboard, setFormattedLeaderboard] = useState<
     FormattedLeaderboard[]
   >([]);
+  const [isFetchingLeaderboard, setIsFetchingLeaderboard] = useState(true);
   const [isUpdatingLeaderboard, setIsUpdatingLeaderboard] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [txLink, setTxLink] = useState("");
 
   const { sourceChain, userAddress, handleError } = useAppContext();
 
   const { writeContractAsync } = useWriteContract();
 
-  const { data: leaderboardLength, isPending } = useReadContract({
-    address: sourceChain?.leaderboard,
-    abi: leaderboardAbi,
-    functionName: "getResultsLength",
-    chainId: sourceChain?.definition?.id,
-    query: { enabled: !!sourceChain },
-  });
+  const { data: leaderboardLength, isPending: isPendingLeaderboardLength } =
+    useReadContract({
+      address: sourceChain?.leaderboard,
+      abi: leaderboardAbi,
+      functionName: "getResultsLength",
+      chainId: sourceChain?.definition?.id,
+      query: { enabled: !!sourceChain },
+    });
 
   useEffect(() => {
     const getChunckedLeaderboardData = async () => {
+      setIsFetchingLeaderboard(true);
       const leaderboardLengthNumber = Number(leaderboardLength);
       const aggregatedLeaderboardData: FormattedLeaderboard[] = [];
-      let numCalls = 0;
-      for (let i = 0; i < leaderboardLengthNumber; i += CHUNCK_STEP) {
-        const endIndex = Math.min(i + CHUNCK_STEP, leaderboardLengthNumber);
-        const leaderboardResponse = await getLeaderboardContract(
-          sourceChain?.name,
-        ).getResultsPaginated(i, endIndex);
-        const parsedLeaderboardResponse =
-          parseLeaderboardResponse(leaderboardResponse);
-        aggregatedLeaderboardData.push(...parsedLeaderboardResponse);
-        ++numCalls;
-        // If too many calls, sleep for some time to avoid rate limit on public rpcs.
-        if (numCalls === NUM_CALLS_TO_SLEEP) {
-          await sleep();
-          numCalls = 0;
+      const targetChain = getTargetChain();
+      try {
+        let numCalls = 0;
+        for (let i = 0; i < leaderboardLengthNumber; i += CHUNCK_STEP) {
+          const endIndex = Math.min(i + CHUNCK_STEP, leaderboardLengthNumber);
+          const leaderboardResponse = await getLeaderboardContract(
+            targetChain.name,
+          ).getResultsPaginated(i, endIndex);
+          const parsedLeaderboardResponse =
+            parseLeaderboardResponse(leaderboardResponse);
+          aggregatedLeaderboardData.push(...parsedLeaderboardResponse);
+          ++numCalls;
+          // If too many calls, sleep for some time to avoid rate limit on public rpcs.
+          if (numCalls === NUM_CALLS_TO_SLEEP) {
+            console.debug("sleeping to avoid rate limit on public rpcs");
+            await sleep();
+            numCalls = 0;
+          }
         }
+        const sortedLeaderboardData = sortLeaderboardData(
+          aggregatedLeaderboardData,
+        );
+        setFormattedLeaderboard(sortedLeaderboardData);
+      } catch (error) {
+        handleError(error);
       }
-      const sortedLeaderboardData = sortLeaderboardData(
-        aggregatedLeaderboardData,
-      );
-      setFormattedLeaderboard(sortedLeaderboardData);
+      setIsFetchingLeaderboard(false);
     };
+
     if (leaderboardLength) {
       getChunckedLeaderboardData();
     }
   }, [leaderboardLength]);
+
+  useEffect(() => {
+    document.title = "Race Grid | Leaderboard";
+  });
 
   const onClickUpdateLeaderboard = async () => {
     setIsUpdatingLeaderboard(true);
@@ -150,6 +167,7 @@ export default function LeaderboardPage() {
         args: [userAddress as Address, BigInt(finished)],
         chainId: sourceChain?.definition?.id,
       });
+      setTxLink(`https://hekla.taikoscan.io/tx/${hash}`);
       await waitForTransactionReceipt(config, {
         hash,
         chainId: sourceChain?.definition?.id,
@@ -192,7 +210,7 @@ export default function LeaderboardPage() {
       <div>
         <h1 className="text-2xl font-bold">Leaderboard</h1>
 
-        {isPending ? (
+        {isPendingLeaderboardLength || isFetchingLeaderboard ? (
           <div className="mt-20">
             {Array.from({ length: 3 }).map((_, i) => (
               <div className="mb-8" key={i}>
@@ -220,8 +238,18 @@ export default function LeaderboardPage() {
                     ADD MY RACE IN THE LEADERBOARD
                   </Button>
 
+                  {txLink && (
+                    <a
+                      href={txLink}
+                      target="_blank"
+                      className="text-xl mx-8 underline hover:text-blue-400 w-fit transition-all inline-block"
+                    >
+                      Open TX
+                    </a>
+                  )}
+
                   {isUpdatingLeaderboard && (
-                    <div className="ml-4 flex flex-row align-center justify-center">
+                    <div className="flex flex-row align-center justify-center">
                       <CircularProgress size={20} />
                     </div>
                   )}
@@ -229,9 +257,21 @@ export default function LeaderboardPage() {
               )}
 
               {isSuccess && !isUpdatingLeaderboard && (
-                <div className="flex flex-row align-center justify-center">
-                  Race entry added successfully!
-                </div>
+                <>
+                  <div className="flex flex-row align-center justify-center text-xl">
+                    Race entry added successfully!
+                  </div>
+
+                  {txLink && (
+                    <a
+                      href={txLink}
+                      target="_blank"
+                      className="text-xl ml-4 underline hover:text-blue-400 w-fit transition-all inline-block"
+                    >
+                      Open TX
+                    </a>
+                  )}
+                </>
               )}
             </div>
 

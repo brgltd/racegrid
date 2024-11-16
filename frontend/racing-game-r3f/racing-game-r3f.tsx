@@ -32,6 +32,7 @@ import { useToggle } from "./useToggle";
 import type { DirectionalLight } from "three";
 import { usePathname, useRouter } from "next/navigation";
 import { Clock } from "./ui/Clock";
+import { CircularProgress } from "@mui/material";
 
 const layers = new Layers();
 layers.enable(levelLayer);
@@ -68,8 +69,8 @@ function Carpet() {
 
 export function RacingGameR3F(): JSX.Element {
   const [light, setLight] = useState<DirectionalLight | null>(null);
-
-  const router = useRouter();
+  const [shouldResetClock, setShouldResetClock] = useState(false);
+  const [isRaceFinished, setIsRaceFinished] = useState(false);
 
   const [actions, dpr, editor, shadows] = useStore((s) => [
     s.actions,
@@ -80,6 +81,9 @@ export function RacingGameR3F(): JSX.Element {
 
   const { onStart, onFinish } = actions;
 
+  const router = useRouter();
+  const pathname = usePathname();
+
   const ToggledCheckpoint = useToggle(Checkpoint, "checkpoint");
   const ToggledDebug = useToggle(Debug, "debug");
   const ToggledEditor = useToggle(Editor, "editor");
@@ -87,10 +91,10 @@ export function RacingGameR3F(): JSX.Element {
   const ToggledOrbitControls = useToggle(OrbitControls, "editor");
   const ToggledStats = useToggle(Stats, "stats");
 
-  const pathname = usePathname();
-
   const onFinishRace = () => {
     onFinish();
+    setShouldResetClock(true);
+    setIsRaceFinished(true);
     router.push("/leaderboard");
   };
 
@@ -106,8 +110,17 @@ export function RacingGameR3F(): JSX.Element {
     };
   });
 
+  if (isRaceFinished) {
+    return (
+      <div className="redirecting">
+        <div className="redirecting-text">Redirecting</div>
+        <CircularProgress size={40} />
+      </div>
+    );
+  }
+
   return (
-    <div className="main">
+    <div className="game">
       <Intro>
         <Canvas
           key={`${dpr}${shadows}`}
@@ -193,7 +206,7 @@ export function RacingGameR3F(): JSX.Element {
           <ToggledMap />
           <ToggledOrbitControls />
         </Canvas>
-        <Clock />
+        <Clock shouldReset={shouldResetClock} />
         <ToggledEditor />
         <Help />
         <Speed />

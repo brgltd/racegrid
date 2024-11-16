@@ -2,10 +2,10 @@
   "attributes": [
     {
       "trait_type": "color",
-      "value": "dark"
+      "value": "black"
     }
   ],
   "description": "A collection of cars for the RaceGrid ecosystem.",
-  "image": "https://racegrid.vercel.app/cars/dark.png",
-  "name": "Race Grid Dark Car"
+  "image": "https://racegrid.vercel.app/cars/black.png",
+  "name": "Race Grid Black Car"
 }
