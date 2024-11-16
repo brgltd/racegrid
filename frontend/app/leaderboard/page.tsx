@@ -250,7 +250,7 @@ export default function LeaderboardPage() {
 
                   {isUpdatingLeaderboard && (
                     <div className="flex flex-row align-center justify-center ml-8">
-                      <CircularProgress size={20} />
+                      <CircularProgress size={32} />
                     </div>
                   )}
                 </>
