@@ -48,14 +48,14 @@ function PlayChallenge({
             </div>
           }
         >
-          <div>Play Challenge</div>
+          <div>Play Challenge (NFT)</div>
         </Tooltip>
       </div>
     );
   }
   return (
     <div className="text-2xl mb-10 underline hover:text-blue-400 w-fit transition-colors">
-      <Link href="/challenge">Play Challenge</Link>
+      <Link href="/challenge">Play Challenge (NFT)</Link>
     </div>
   );
 }
@@ -74,15 +74,18 @@ export default function HomePage() {
   return (
     <div>
       <div>
-        <PlayChallenge
-          {...{ isGameAllowed, isPendingUserToken, userAddress, isClient }}
-        />
+				<div className="text-2xl mb-10 underline hover:text-blue-400 w-fit transition-colors">
+					<Link href="/challenge">Play Game</Link>
+				</div>
         <div className="text-2xl mb-10 underline hover:text-blue-400 w-fit transition-colors">
           <Link href="/nft">Purchase NFT</Link>
         </div>
         <div className="text-2xl mb-8 w-fit">
           <div>Multiplayer (Coming Soon)</div>
         </div>
+        <PlayChallenge
+          {...{ isGameAllowed, isPendingUserToken, userAddress, isClient }}
+        />
       </div>
     </div>
   );

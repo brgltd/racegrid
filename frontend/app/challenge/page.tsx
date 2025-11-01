@@ -10,15 +10,21 @@ export default function Challenge() {
   const [isGameAllowed] = useStore((s) => [s.isGameAllowed]);
   const router = useRouter();
 
+	/*
   useEffect(() => {
     if (!isGameAllowed) {
       router.push("/");
     }
   }, [isGameAllowed]);
+	*/
 
   useEffect(() => {
     document.title = "Race Grid | Challenge";
   }, []);
 
-  return isGameAllowed ? <RacingGame /> : null;
+  // return isGameAllowed ? <RacingGame /> : null;
+
+	return <RacingGame />
 }
+
+
